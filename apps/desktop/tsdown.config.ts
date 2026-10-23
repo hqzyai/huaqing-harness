@@ -2,7 +2,7 @@ import { defineConfig } from 'tsdown'
 import { build } from 'vite'
 import { fileURLToPath } from 'node:url'
 import { readFileSync } from 'node:fs'
-import { readFile } from 'node:fs/promises'
+import { readFile, readdir } from 'node:fs/promises'
 import { repositoryClientBuildEnvironment, resolveClientBuildEnvironment } from '../../scripts/client-build-environment.ts'
 import { packagedImportsPlugin } from './scripts/desktop-bundle-imports.mjs'
 
@@ -56,7 +56,8 @@ export default defineConfig([
         plugins: [{
           name: 'desktop-brand-font',
           async generateBundle() {
-            for (const name of ['brand-font.css', 'montserrat-regular.woff2', 'montserrat-light.woff2', 'montserrat-medium.woff2', 'Montserrat-OFL.txt']) {
+            const fonts = await readdir(new URL('../../packages/client/ui-theme/src/styles/fonts/', import.meta.url))
+            for (const name of ['brand-font.css', ...fonts.map(file => `fonts/${file}`)]) {
               this.emitFile({
                 type: 'asset',
                 fileName: name,

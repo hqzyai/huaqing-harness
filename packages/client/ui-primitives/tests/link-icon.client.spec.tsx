@@ -54,14 +54,14 @@ describe('LinkIcon', () => {
   it('every kind draws its own glyph', () => {
     const paths = kinds.map((kind) => {
       const { container } = render(<LinkIconRegular kind={kind} />)
-      return container.querySelector('path')!.getAttribute('d')
+      return container.querySelector('svg')!.innerHTML
     })
     expect(new Set(paths).size).toBe(kinds.length)
   })
 
-  it('defaults to the 14px inline link seat; size and className land on the svg', () => {
+  it('defaults to the 16px inline link seat; size and className land on the svg', () => {
     const { container } = render(<LinkIconRegular kind="url" />)
-    expect(container.querySelector('svg')!.getAttribute('width')).toBe('14')
+    expect(container.querySelector('svg')!.getAttribute('width')).toBe('16')
     const sized = render(<LinkIconRegular kind="folder" size={20} className="x" />)
     const svg = sized.container.querySelector('svg')!
     expect(svg.getAttribute('width')).toBe('20')
@@ -69,9 +69,9 @@ describe('LinkIcon', () => {
     expect(svg.classList.contains('x')).toBe(true)
   })
 
-  it('offers medium artwork with a 1.3px stroke', () => {
+  it('offers medium artwork with the shared 1.75px stroke', () => {
     const { container } = render(<LinkIconMedium kind="url" />)
-    expect(container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.3')
+    expect(container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.75')
   })
 })
 
@@ -119,7 +119,7 @@ const SITE_URLS: string[] = [
 /** The single path data of the mark a URL renders. */
 function glyphPath(href: string): string {
   const { container } = render(<LinkIconMedium kind="url" href={href} />)
-  return container.querySelector('path')!.getAttribute('d')!
+  return container.querySelector('svg')!.innerHTML
 }
 
 describe('LinkIcon site marks', () => {

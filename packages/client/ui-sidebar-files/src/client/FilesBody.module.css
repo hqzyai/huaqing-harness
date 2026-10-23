@@ -24,7 +24,7 @@
   box-sizing: border-box;
   height: 38px;
   padding: 0 6px 0 16px;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l3);
+  border-bottom: 1px solid var(--dsw-alias-border-l3);
 }
 
 /* The margin plus the header's gap keeps the path 16px clear of reload. */

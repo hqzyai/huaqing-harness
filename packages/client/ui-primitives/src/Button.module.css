@@ -4,32 +4,33 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  border: none;
-  border-radius: var(--dsw-radius-md);
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--dsw-radius-sm);
   cursor: pointer;
   font-size: 14px;
-  line-height: 22px;
+  line-height: 1.25rem;
+  font-weight: 500;
   color: var(--dsw-alias-label-primary);
   background: transparent;
-  padding: 0 14px;
+  padding: 0.5rem 0.75rem;
 }
 
 .button:disabled {
   cursor: not-allowed;
-  opacity: 0.4;
+  opacity: 0.5;
 }
 
 .md {
-  height: 36px;
+  min-height: 2.25rem;
 }
 
 /* Compact controls retain their dimensions across filled and outlined variants. */
 .sm {
-  height: 28px;
-  font-size: 12px;
-  line-height: 18px;
-  padding: 0 10px;
+  min-height: 2rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.375rem 0.5rem;
   border-radius: var(--dsw-radius-sm);
 }
 
@@ -52,7 +53,7 @@
 
 /* Outlined actions use the same neutral stroke as settings links. */
 .outline {
-  border: 0.5px solid var(--dsw-alias-border-l3);
+  border: 1px solid var(--input);
   background: transparent;
 }
 
@@ -74,4 +75,16 @@
   height: 16px;
   align-items: center;
   justify-content: center;
+}
+
+.button:focus-visible {
+  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
+  outline-offset: 2px;
+}
+
+.primary:active:not(:disabled) { background: var(--dsw-primary-active); }
+.button[aria-invalid='true'] { border-color: var(--destructive); }
+
+@media (hover: none) and (pointer: coarse) {
+  .button { min-height: 2.75rem; }
 }

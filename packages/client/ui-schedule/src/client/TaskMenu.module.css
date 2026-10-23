@@ -72,7 +72,7 @@
 .header {
   flex: none;
   padding: 5px;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l2);
+  border-bottom: 1px solid var(--dsw-alias-border-l2);
 }
 
 .itemWrap {
@@ -91,7 +91,7 @@
   border-radius: var(--dsw-radius-md);
   background: transparent;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   color: var(--dsw-alias-label-primary);
   text-align: left;
@@ -170,7 +170,7 @@
 /* Heading row: non-interactive small grey text, padding aligned with items. */
 .label {
   padding: 6px 8px;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 15px;
   color: var(--dsw-alias-label-tertiary);
 }

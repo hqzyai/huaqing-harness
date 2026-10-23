@@ -1,16 +1,18 @@
 .wrap {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 8px;
-  border: 0.5px solid var(--dsw-alias-border-l4);
-  border-radius: var(--dsw-radius-md);
+  gap: 8px;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--input);
+  border-radius: var(--dsw-radius-sm);
   background: var(--dsw-alias-bg-layer-1);
 }
 
 .wrap:focus-within {
-  border-color: var(--dsw-alias-state-business-primary);
+  border-color: var(--ring);
+  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
+  outline-offset: 2px;
 }
 
 .icon {
@@ -28,11 +30,22 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: 14px;
-  line-height: 22px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   color: var(--dsw-alias-label-primary);
 }
 
 .input::placeholder {
   color: var(--dsw-alias-label-dimmed);
+}
+
+.wrap:has(input[aria-invalid='true']) { border-color: var(--destructive); }
+.wrap:has(input:disabled) { opacity: 0.5; }
+.wrap:has(input[readonly]) { background: var(--muted); }
+@media (hover: hover) {
+  .wrap:has(input:not(:disabled)):hover { border-color: var(--ring); }
+}
+@media (hover: none) and (pointer: coarse) {
+  .wrap { min-height: 2.75rem; }
+  .input { font-size: 1rem; line-height: 1.5rem; }
 }

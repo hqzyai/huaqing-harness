@@ -23,7 +23,7 @@
   outline: none;
   background: transparent;
   color: var(--dsw-alias-label-secondary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   font-weight: 400;
   cursor: pointer;
@@ -135,7 +135,7 @@
   border-radius: var(--dsw-radius-md);
   background: var(--dsw-alias-interactive-bg-hover-danger);
   color: var(--dsw-alias-state-error-primary);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
 }
 
@@ -263,7 +263,7 @@
 .modelName {
   overflow: hidden;
   color: inherit;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 18px;
   font-weight: 400;
   text-overflow: ellipsis;
@@ -296,7 +296,7 @@
   border-radius: var(--dsw-radius-md);
   background: transparent;
   color: var(--dsw-alias-label-primary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   cursor: pointer;
   text-align: left;

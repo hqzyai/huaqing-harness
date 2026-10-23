@@ -84,7 +84,7 @@
   flex-direction: column;
   margin-top: 3px;
   padding-top: 3px;
-  border-top: 0.5px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--dsw-alias-border-l2);
 }
 
 .itemWrap {
@@ -95,15 +95,15 @@
 .item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
-  min-height: 34px;
+  min-height: 32px;
   padding: 6px 8px;
   border: none;
-  border-radius: var(--dsw-radius-md);
+  border-radius: var(--dsw-radius-sm);
   background: transparent;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   color: var(--dsw-alias-label-primary);
   text-align: left;
@@ -122,7 +122,7 @@
 }
 
 .denseList .item {
-  min-height: 30px;
+  min-height: 28px;
   padding-block: 4px;
 }
 
@@ -137,17 +137,17 @@
 }
 
 .compactList .item {
-  min-height: 24px;
-  gap: 5px;
+  min-height: 28px;
+  gap: 8px;
   padding: 2px 6px;
   border-radius: var(--dsw-radius-sm);
-  font-size: 11px;
-  line-height: 17px;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .compactList .itemIcon {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
 }
 
 .compactList .separator {
@@ -161,15 +161,15 @@
 }
 
 .item:disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .itemIcon {
   display: inline-flex;
   flex: none;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   align-items: center;
   justify-content: center;
   color: var(--dsw-alias-menu-icon);
@@ -177,14 +177,14 @@
 
 .itemIcon svg,
 .check {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .compactList .itemIcon svg,
 .compactList .check {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
 }
 
 .itemLabel {
@@ -202,7 +202,7 @@
 
 .shortcut .shortcutKeys {
   color: var(--dsw-alias-label-caption);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
 }
 
@@ -243,7 +243,7 @@
 /* Heading row: non-interactive small grey text, padding aligned with items. */
 .label {
   padding: 6px 8px;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 15px;
   color: var(--dsw-alias-label-tertiary);
 }

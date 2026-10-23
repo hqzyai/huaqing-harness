@@ -18,7 +18,7 @@ export const Input = forwardRef<HTMLInputElement, {
   return (
     <span className={clsx(css.wrap, className)}>
       {icon != null && <span className={css.icon}>{icon}</span>}
-      <input ref={ref} className={css.input} {...rest} />
+      <input data-slot="input" ref={ref} className={css.input} {...rest} />
     </span>
   )
 })

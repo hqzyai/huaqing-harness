@@ -172,7 +172,7 @@
   pointer-events: none;
   transition: opacity 120ms ease, border-color 120ms ease;
 }
-.card::before { border: 0.5px solid var(--dsw-alias-border-l2); }
+.card::before { border: 1px solid var(--dsw-alias-border-l2); }
 .card::after {
   padding: 2px;
   background: conic-gradient(from var(--dsh-onboarding-border-angle), var(--card-border-stops));
@@ -217,7 +217,7 @@
   to { opacity: 1; transform: scale(1); }
 }
 .cardTitle { font-size: 20px; line-height: 28px; font-weight: 400; }
-.cardDescription { margin-top: 8px; font-size: 15px; line-height: 21px; font-weight: 300; color: var(--dsw-alias-label-tertiary); }
+.cardDescription { margin-top: 8px; font-size: 14px; line-height: 21px; font-weight: 300; color: var(--dsw-alias-label-tertiary); }
 .processIcon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; margin-bottom: 12px; }
 .primaryAction { position: absolute; top: 100%; width: 100%; min-height: 44px; display: flex; justify-content: center; margin-top: 100px; }
 .primaryAction > button { width: min(240px, 100%); }

@@ -59,7 +59,7 @@
   min-width: 0;
   overflow: hidden;
   background: var(--dsw-specific-sidebar-fill);
-  border-right: 0.5px solid var(--dsw-alias-border-l3);
+  border-right: 1px solid var(--dsw-alias-border-l3);
 }
 
 .centerCol {
@@ -151,7 +151,7 @@
 
 :global([data-platform='darwin']) .centerCol {
   background: var(--dsw-alias-bg-base);
-  border-left: 0.5px solid var(--dsw-alias-border-l3);
+  border-left: 1px solid var(--dsw-alias-border-l3);
 }
 
 /* The right track paints the base ground on the transparent frame: while the

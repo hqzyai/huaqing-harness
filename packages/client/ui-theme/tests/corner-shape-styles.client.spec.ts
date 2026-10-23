@@ -1,18 +1,9 @@
-/**
- * Corner-shape stylesheet contract, asserted against the CSS text on disk:
- * corner-shape.css smooths every rounded corner to the superellipse token
- * strictly inside a `@supports` guard, and every effectively full-round radius
- * in any package stylesheet pairs `corner-shape: round` in the same rule,
- * because a superellipse deforms a circle into a squircle (a spinner would
- * visibly wobble) and squares off capsule ends.
- */
+/** Circular controls preserve explicit full-round geometry for circles and switches. */
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { atRuleBlock, packageStylesheets, parseRules } from './stylesheet-scan.ts'
+import { packageStylesheets, parseRules } from './stylesheet-scan.ts'
 
-/** The support guard prelude, spelled exactly as the sheet must spell it. */
-const GUARD = '@supports (corner-shape: superellipse(1.5))'
 /** The smoothing token corner-shape.css owns. */
 const TOKEN = '--dsw-corner-shape'
 
@@ -32,30 +23,12 @@ function isFullRound(value: string): boolean {
     part === '50%' || part === '100%' || (part.endsWith('px') && Number.parseFloat(part) >= 99))
 }
 
-describe('corner-shape.css smoothing', () => {
-  const withoutComments = sheetCss.replace(/\/\*[\s\S]*?\*\//g, ' ')
-  const guard = atRuleBlock(withoutComments, GUARD)
-
-  it('declares the token and its application only inside the support guard', () => {
-    // Outside the guard the declarations would be dropped as invalid anyway,
-    // but only on engines without corner-shape; keeping everything inside the
-    // guard states that unsupporting engines keep plain circular corners.
-    expect(guard, GUARD).toBeDefined()
-    const before = withoutComments.slice(0, withoutComments.indexOf(GUARD))
-    const after = withoutComments.slice(guard!.end + 1)
-    expect(before.trim(), `content before ${GUARD}`).toBe('')
-    expect(after.trim(), `content after ${GUARD}`).toBe('')
-  })
-
-  it('defines the superellipse token on :root and applies it universally', () => {
-    // corner-shape does not inherit, so only the universal selector (with the
-    // generated ::before/::after) reaches every rounded surface.
-    const rules = parseRules(withoutComments.slice(guard!.start + 1, guard!.end))
-    const root = rules.find(rule => rule.selectors.includes(':root'))
-    expect(root?.declarations).toContainEqual([TOKEN, 'superellipse(1.5)'])
-    const universal = rules.find(rule => rule.selectors.includes('*'))
-    expect(universal?.selectors).toEqual(['*', '*::before', '*::after'])
-    expect(universal?.declarations).toContainEqual(['corner-shape', `var(${TOKEN})`])
+describe('corner-shape.css', () => {
+  it('uses ordinary circular corners without changing user-content geometry', () => {
+    const rules = parseRules(sheetCss)
+    expect(rules.find(rule => rule.selectors.includes(':root'))?.declarations)
+      .toContainEqual([TOKEN, 'round'])
+    expect(rules.some(rule => rule.selectors.includes('*'))).toBe(false)
   })
 })
 

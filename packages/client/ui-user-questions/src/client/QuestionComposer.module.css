@@ -92,7 +92,7 @@
   /* Eyebrow-to-title gap widened from the figma 2px (user-tuned). */
   margin-bottom: 5px;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
 }
 
@@ -249,7 +249,7 @@
   grid-area: 1 / 1;
   width: 14px;
   height: 14px;
-  border: 0.5px solid var(--dsw-alias-border-l4);
+  border: 1px solid var(--dsw-alias-border-l4);
   border-radius: var(--dsw-radius-xs);
   transition: background-color 120ms ease, border-color 120ms ease;
 }
@@ -292,7 +292,7 @@
   border-radius: var(--dsw-radius-xs);
   background: var(--dsw-specific-sidebar-nav-item-active-accent);
   color: var(--dsw-alias-button-info-fill);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 18px;
   font-weight: 600;
 }
@@ -413,7 +413,7 @@
   min-height: 64px;
   flex-shrink: 0;
   margin: 0 12px;
-  border: 0.5px solid var(--dsw-alias-border-l4);
+  border: 1px solid var(--dsw-alias-border-l4);
   border-radius: var(--dsw-radius-lg);
   background: var(--dsw-alias-bg-module-platform);
   --dsh-answer-field-padding: 8px 12px;
@@ -437,7 +437,7 @@
   flex: 1;
   min-height: 16px;
   color: var(--dsw-alias-state-error-primary);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
   text-align: right;
 }
@@ -456,7 +456,7 @@
   }
 
   .title {
-    font-size: 15px;
+    font-size: 14px;
     line-height: 21px;
   }
 

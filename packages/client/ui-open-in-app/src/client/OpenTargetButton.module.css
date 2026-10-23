@@ -13,7 +13,7 @@
   box-sizing: border-box;
   height: 24px;
   overflow: hidden;
-  border: 0.5px solid var(--dsw-alias-border-l4);
+  border: 1px solid var(--dsw-alias-border-l4);
   border-radius: var(--dsw-radius-sm);
   font-family: var(--dsw-font-family);
 }
@@ -26,7 +26,7 @@
   border: 0;
   background: none;
   color: var(--dsw-alias-label-primary);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
   white-space: nowrap;
   cursor: pointer;
@@ -39,7 +39,7 @@
 
 .chevron {
   padding: 3px 4px 3px 3px;
-  border-left: 0.5px solid var(--dsw-alias-border-l4);
+  border-left: 1px solid var(--dsw-alias-border-l4);
   color: var(--dsw-alias-label-secondary);
 }
 

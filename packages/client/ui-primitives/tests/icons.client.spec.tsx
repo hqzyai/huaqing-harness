@@ -30,25 +30,13 @@ describe('product icon set', () => {
     ]))
   })
 
-  it('draws the circled close as one currentColor knockout path in both weights', () => {
-    // A filled disc with the cross cut out of it (even-odd), so the cross shows
-    // the surface behind the glyph on any background instead of a second color.
-    for (const Icon of [primitives.IconCloseCircleFillRegular, primitives.IconCloseCircleFillMedium]) {
-      const { container, unmount } = render(<Icon />)
-      const paths = container.querySelectorAll('path')
-      expect(paths).toHaveLength(1)
-      expect(paths[0]!.getAttribute('fill')).toBe('currentColor')
-      expect(paths[0]!.getAttribute('fill-rule')).toBe('evenodd')
-      expect(paths[0]!.getAttribute('stroke')).toBeNull()
-      expect(container.querySelector('svg')!.getAttribute('width')).toBe('16')
-      unmount()
+  it('keeps the close and shield icons decorative at the shared stroke', () => {
+    for (const Icon of [primitives.IconCloseCircleFillRegular, primitives.IconShieldOutlineRegular]) {
+      const view = render(<Icon />)
+      expect(view.container.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true')
+      expect(view.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.75')
+      view.unmount()
     }
-  })
-
-  it('exports the shield contour and regular stroke for composite glyphs', () => {
-    const { container } = render(<primitives.IconShieldOutlineRegular />)
-    expect(container.querySelector('path')?.getAttribute('d')).toBe(primitives.SHIELD_OUTLINE_PATH)
-    expect(container.querySelector('svg')?.getAttribute('stroke-width')).toBe(String(primitives.ICON_REGULAR_STROKE))
   })
 
   it.each(iconNames)('%s renders an svg with currentColor fills and no hardcoded palette', (name) => {
@@ -70,11 +58,11 @@ describe('product icon set', () => {
     expect(svg.classList.contains('x')).toBe(true)
   })
 
-  it('uses 1px regular and 1.3px medium strokes', () => {
+  it('uses the same accessible stroke in both compatibility variants', () => {
     const regular = render(<primitives.IconSearchOutlineRegular />)
-    expect(regular.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1')
+    expect(regular.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.75')
     const medium = render(<primitives.IconSearchOutlineMedium />)
-    expect(medium.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.3')
+    expect(medium.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.75')
   })
 
   it('exports regular and medium permission glyphs', () => {
@@ -86,10 +74,10 @@ describe('product icon set', () => {
     ] as const
     for (const [Regular, Medium] of pairs) {
       const regular = render(<Regular />)
-      expect(regular.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1')
+      expect(regular.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.75')
       regular.unmount()
       const medium = render(<Medium />)
-      expect(medium.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.3')
+      expect(medium.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.75')
       medium.unmount()
     }
   })
@@ -97,21 +85,21 @@ describe('product icon set', () => {
   it('exports both weights for every reference kind', () => {
     for (const kind of ['session', 'file', 'folder'] as const) {
       const regular = render(<primitives.ReferenceIconRegular kind={kind} />)
-      expect(regular.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1')
+      expect(regular.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.75')
       regular.unmount()
       const medium = render(<primitives.ReferenceIconMedium kind={kind} />)
-      expect(medium.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.3')
+      expect(medium.container.querySelector('svg')?.getAttribute('stroke-width')).toBe('1.75')
       medium.unmount()
     }
   })
 
   it('each glyph defaults to its own drawn size, not one set-wide default', () => {
     const api = render(<IconApiOutlineRegular />)
-    expect(api.container.querySelector('svg')!.getAttribute('width')).toBe('14')
+    expect(api.container.querySelector('svg')!.getAttribute('width')).toBe('16')
     const folder = render(<IconFolderCloseRegular />)
     expect(folder.container.querySelector('svg')!.getAttribute('width')).toBe('16')
     const archive = render(<IconArchiveOutlineRegular />)
-    expect(archive.container.querySelector('svg')!.getAttribute('width')).toBe('20')
+    expect(archive.container.querySelector('svg')!.getAttribute('width')).toBe('16')
     const alarm = render(<IconAlarmClockOutlineRegular />)
     expect(alarm.container.querySelector('svg')!.getAttribute('width')).toBe('16')
   })
@@ -137,14 +125,16 @@ describe('FishLogo', () => {
 })
 
 describe('BrandWordmark', () => {
-  it('can render the name artwork with or without its leading mark', () => {
+  it('renders the same undistorted HQZY image for both compatibility options', () => {
     const view = render(<primitives.BrandWordmark />)
-    const svg = view.container.querySelector('svg')!
-    expect(svg.getAttribute('width')).toBe('182')
-    expect(svg.getAttribute('viewBox')).toBe('0 0 182 24')
-
-    view.rerender(<primitives.BrandWordmark includeMark={false} />)
-    expect(svg.getAttribute('width')).toBe('156')
-    expect(svg.getAttribute('viewBox')).toBe('26 0 156 24')
+    const image = view.container.querySelector('img')!
+    expect(image.alt).toBe('HQZY')
+    expect(image.width).toBe(28)
+    expect(image.style.objectFit).toBe('contain')
+    expect(image.draggable).toBe(false)
+    const source = image.src
+    view.rerender(<primitives.BrandWordmark includeMark={false} size={24} />)
+    expect(image.src).toBe(source)
+    expect(image.width).toBe(24)
   })
 })

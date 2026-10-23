@@ -57,7 +57,7 @@
   font: inherit;
   text-align: left;
   background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l3);
+  border: 1px solid var(--dsw-alias-border-l3);
   border-radius: var(--dsl-guide-entry-radius);
   cursor: pointer;
 }
@@ -107,7 +107,7 @@
 .entryDescription {
   overflow: hidden;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.4;
   white-space: nowrap;
   text-overflow: ellipsis;
