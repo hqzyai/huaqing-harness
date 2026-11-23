@@ -150,7 +150,6 @@ beforeEach(() => {
   observers = []
   animationFrames = new Map()
   nextFrame = 1
-  vi.stubEnv('DSH_CLIENT_TITLE', undefined)
   vi.stubGlobal('ResizeObserver', ResizeObserverStub)
   vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
     const id = nextFrame++
@@ -184,22 +183,21 @@ afterEach(() => {
 })
 
 describe('AppFrame', () => {
-  it('localizes the product title without a configured build title', () => {
+  it('sets the branded product title', () => {
     mountFrame()
-    expect(document.title).toBe('DSH Local Build')
+    expect(document.title).toBe('华清智言 · Huaqing Harness')
   })
 
-  it('follows the selected durable Session title', () => {
-    vi.stubEnv('DSH_CLIENT_TITLE', 'Product')
+  it('keeps the branded title while changing sessions', () => {
     selectedSessionTitle = 'First'
     const { rerenderFrame } = mountFrame()
-    expect(document.title).toBe('First — Product')
+    expect(document.title).toBe('华清智言 · Huaqing Harness')
     selectedSessionTitle = 'Revised'
     rerenderFrame()
-    expect(document.title).toBe('Revised — Product')
+    expect(document.title).toBe('华清智言 · Huaqing Harness')
     selectedSession = undefined
     rerenderFrame()
-    expect(document.title).toBe('Product')
+    expect(document.title).toBe('华清智言 · Huaqing Harness')
   })
 
   it('renders owner props for the default sidebar and prospective right panel', () => {
@@ -285,7 +283,7 @@ describe('AppFrame', () => {
       expect(instance.getSnapshot().layoutInfo).toBe(layoutInfo)
       expect(tracks(frame)).toEqual([280, 0])
       expect(selectedSession).toBe(sessionId)
-      expect(document.title).toBe(panelId === null ? 'Session title — DSH Local Build' : 'DSH Local Build')
+      expect(document.title).toBe('华清智言 · Huaqing Harness')
     }
   })
 })

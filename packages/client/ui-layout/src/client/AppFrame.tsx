@@ -120,11 +120,9 @@ function DragHandle(props: { side: 'sidebar' | 'rightbar'; left: number; onStart
 /** The three-column frame (see module doc). */
 export function AppFrame({
   useStore,
-  useSessions,
   usePanelInfo,
   actions,
   renderSlot,
-  t,
 }: AppFrameProps) {
   const layoutInfo = useStore(state => state.layoutInfo)
   const frameRef = useRef<HTMLDivElement | null>(null)
@@ -230,7 +228,7 @@ export function AppFrame({
   const onRightbarDrag = useCallback((dx: number) => {
     actions.setRightbar(rightbarBase.current - dx)
   }, [actions])
-  const productTitle = process.env.DSH_CLIENT_TITLE ?? t('brand.localBuild')
+  const productTitle = '华清智言 · Huaqing Harness'
   // The rendered template lets the grid solve the squeeze natively: the centre
   // declares its protected minimum and the right column bids up to the clamped
   // preference, so a window resize lands in the same layout pass as the frame
@@ -272,11 +270,7 @@ export function AppFrame({
       data-dragging={dragging || undefined}
       data-animating={animating > 0 || undefined}
     >
-      <DocumentTitle
-        productTitle={productTitle}
-        useSessions={useSessions}
-        usePanelInfo={usePanelInfo}
-      />
+      <DocumentTitle productTitle={productTitle} />
       <div className={css.sidebarCol}>
         {sidebar}
       </div>
