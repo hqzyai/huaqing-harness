@@ -1,5 +1,5 @@
 ---
-description: "面向侧栏的官方 DeepSeek Harness 品牌填充，仅在官方构建中生效；供选择或替换品牌呈现的用户与维护者阅读。"
+description: "面向侧栏的官方 Huaqing Harness 品牌填充，仅在官方构建中生效；供选择或替换品牌呈现的用户与维护者阅读。"
 kind: "package-reference"
 ---
 

@@ -1,11 +1,11 @@
 /**
  * @deepseek-ai/dsh-harness-dev-context — model context for an agent that can
- * inspect and extend the DeepSeek Harness serving its Web GUI. It registers
+ * inspect and extend the Huaqing Harness serving its Web GUI. It registers
  * path- and URL-free prompt sections and states the current implementation
  * checkout and Web GUI URL as runtime context, so a process started from
  * another checkout, port, or installation leaves the system prompt unchanged.
- * A Session whose admitted prompt holds the paragraphs that embedded those
- * values keeps them verbatim, so resuming it never rewrites its logged prompt.
+ * A Session whose admitted prompt holds value-bearing paragraphs keeps its
+ * earlier path and URL while the current product name is rendered.
  * @module @deepseek-ai/dsh-harness-dev-context
  */
 
@@ -37,7 +37,7 @@ const HARNESS_SOURCE_GUIDANCE = 'The checkout location and current working direc
   + 'never infer the working directory from the checkout path. Use pwd to determine the current working directory. '
   + 'Use this checkout only to inspect or extend DSH itself.'
 
-const HARNESS_SOURCE_PROMPT = `The runtime context names the DeepSeek Harness implementation checkout. ${HARNESS_SOURCE_GUIDANCE}`
+const HARNESS_SOURCE_PROMPT = `The runtime context names the Huaqing Harness implementation checkout. ${HARNESS_SOURCE_GUIDANCE}`
 
 const WEB_SURFACE_GUIDANCE = 'When the user refers to "this page", "this GUI", or "this app" without naming another target, they mean this GUI. '
   + 'The browser provides no implicit DOM, route, or screenshot context. '
@@ -48,13 +48,13 @@ const WEB_SURFACE_GUIDANCE = 'When the user refers to "this page", "this GUI", o
   + 'The apps/web Vite entry builds the shell but is not a standalone application because only dsh web injects window.__DSH_BOOT__. '
   + 'Do not start a replacement server unless the user asks; if one is needed, use a managed background job and verify its exact URL.'
 
-const WEB_SURFACE_PROMPT = `You are interacting with the user through the DeepSeek Harness Web GUI whose URL the runtime context names. ${WEB_SURFACE_GUIDANCE}`
+const WEB_SURFACE_PROMPT = `You are interacting with the user through the Huaqing Harness Web GUI whose URL the runtime context names. ${WEB_SURFACE_GUIDANCE}`
 
 /**
  * Fixed text around the value in each paragraph that embedded it, frozen as
  * those releases rendered it: never edit these together with the current
  * guidance, or Sessions holding the earlier paragraphs stop matching and
- * rewrite their logged prompt.
+ * lose their admitted path and URL.
  */
 const LEGACY_SOURCE = {
   prefix: 'The DeepSeek Harness implementation checkout is at ',
@@ -92,14 +92,19 @@ declare module '@deepseek-ai/dsh-session-projection/types' {
   }
 }
 
-/** The complete single-line paragraph between `prefix` and `suffix`, or `null` when the prompt has none. */
+/** The complete single-line paragraph with the current product name, or `null` when the prompt has none. */
 function legacyParagraph(prompt: string, { prefix, suffix }: { prefix: string; suffix: string }): string | null {
-  const start = prompt.indexOf(prefix)
-  if (start < 0) return null
-  const end = prompt.indexOf(suffix, start + prefix.length)
-  if (end < 0) return null
-  const paragraph = prompt.slice(start, end + suffix.length)
-  return paragraph.includes('\n') ? null : paragraph
+  const brandedPrefix = prefix.replace('DeepSeek Harness', 'Huaqing Harness')
+  for (const candidate of [brandedPrefix, prefix]) {
+    const start = prompt.indexOf(candidate)
+    if (start < 0) continue
+    const end = prompt.indexOf(suffix, start + candidate.length)
+    if (end < 0) continue
+    const paragraph = prompt.slice(start, end + suffix.length)
+    if (paragraph.includes('\n')) continue
+    return brandedPrefix + paragraph.slice(candidate.length)
+  }
+  return null
 }
 
 /**
@@ -128,7 +133,7 @@ const ADMITS_NOTHING: LegacyPrompt = { source: null, web: null }
 export function apply(ctx: Context): void {
   ctx.sessionProjections.register({
     key: LEGACY_PROMPT,
-    stateVersion: 1,
+    stateVersion: 2,
     stateSchema: legacyPromptSchema,
     init: () => ADMITS_NOTHING,
     apply: foldLegacyPrompt,
@@ -148,7 +153,7 @@ export function apply(ctx: Context): void {
     name: HARNESS_SOURCE,
     order: ctx.systemPrompt.getContextOrder('HARNESS_SOURCE'),
     interpolate: false,
-    text: `Current DeepSeek Harness implementation checkout: ${JSON.stringify(SOURCE_ROOT)}.`,
+    text: `Current Huaqing Harness implementation checkout: ${JSON.stringify(SOURCE_ROOT)}.`,
   })
   ctx.systemPrompt.section({
     name: WEB_SURFACE,
@@ -160,6 +165,6 @@ export function apply(ctx: Context): void {
     name: WEB_SURFACE,
     order: ctx.systemPrompt.getContextOrder('WEB_SURFACE'),
     interpolate: false,
-    text: () => `Current DeepSeek Harness Web GUI URL: ${JSON.stringify(ctx.webApp.getAdvertisedUrl())}.`,
+    text: () => `Current Huaqing Harness Web GUI URL: ${JSON.stringify(ctx.webApp.getAdvertisedUrl())}.`,
   })
 }

@@ -1,0 +1,22 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write deployments/team/ansible/README.md
+/:
+  en: fbbf48932118bdc8
+  zh: f953de1affea7768
+/branding-release:
+  en: 1a0c0c8fc50e65c5
+  zh: 4deb0745536908e9
+/branding-release/inspect-and-plan:
+  en: 6e9a928be79a559e
+  zh: 873ecc9c38696bb0
+/branding-release/apply-and-verify:
+  en: 98748c818075aaa2
+  zh: d6e2c8b964893b7b
+/branding-release/roll-back:
+  en: 4e7d6bb3e8a03e4d
+  zh: 4c36f66387c18a1d
+/branding-release/versioned-image-delivery:
+  en: c4e777c9e409dee3
+  zh: 9c6bafebe994b326

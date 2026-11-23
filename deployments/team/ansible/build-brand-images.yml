@@ -1,0 +1,93 @@
+- name: Build only pinned Harness branding images
+  hosts: workstations
+  gather_facts: false
+  serial: 1
+  vars:
+    brand_build_root: '/home/ubuntu/Workspace/huaqing-harness/ops/branding-{{ brand_source_sha256[:16] }}'
+    brand_image_suffix: 'brand-20261103-{{ brand_source_sha256[:12] }}'
+  tasks:
+    - name: Require the exact service and reviewed source archive
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - brand_build_confirm | default(false) | bool
+          - brand_source_sha256 is match('^[0-9a-f]{64}$')
+          - services.harness.docker_socket == 'unix:///run/user/1001/huaqing-docker/docker.sock'
+    - name: Check real free space before an image build
+      ansible.builtin.command:
+        argv: [/usr/bin/df, '-B1', '--output=avail', /home/ubuntu/Workspace]
+      changed_when: false
+      register: brand_disk
+    - name: Require ten GiB of free build space
+      ansible.builtin.assert:
+        that: brand_disk.stdout_lines[-1] | trim | int > 10737418240
+    - name: Create the isolated build directory
+      ansible.builtin.file:
+        path: '{{ brand_build_root }}'
+        state: directory
+        mode: '0700'
+    - name: Upload the credential-free reviewed branding payload
+      ansible.builtin.copy:
+        src: '{{ brand_source_archive }}'
+        dest: '{{ brand_build_root }}/source.tar.gz'
+        mode: '0600'
+    - name: Hash the transferred payload
+      ansible.builtin.stat:
+        path: '{{ brand_build_root }}/source.tar.gz'
+        checksum_algorithm: sha256
+      register: brand_payload
+    - name: Require exact source bytes
+      ansible.builtin.assert:
+        that: brand_payload.stat.checksum == brand_source_sha256
+    - name: Unpack only this release's build files
+      ansible.builtin.unarchive:
+        src: '{{ brand_build_root }}/source.tar.gz'
+        dest: '{{ brand_build_root }}'
+        remote_src: true
+    - name: Check both current base images before building
+      ansible.builtin.command:
+        argv: [docker, '--host', '{{ services.harness.docker_socket }}', image, inspect, '{{ item }}', '--format', '{{ "{{.Id}}" }}']
+      loop:
+        - sha256:4c7256f2756c7284f21407fb895cacca924ec019605c7f88ea4ed454a6924327
+        - sha256:36b3ba389e32b26a210f8d0cbf468599fe24955b39892de667cbcf7d29b1228b
+      register: brand_bases
+      changed_when: false
+    - name: Require exact immutable base identities
+      ansible.builtin.assert:
+        that: item.stdout | trim == item.item
+      loop: '{{ brand_bases.results }}'
+    - name: Add private build references for the frozen base images
+      ansible.builtin.command:
+        argv: [docker, '--host', '{{ services.harness.docker_socket }}', image, tag, '{{ item.id }}', '{{ item.tag }}']
+      loop:
+        - {id: 'sha256:4c7256f2756c7284f21407fb895cacca924ec019605c7f88ea4ed454a6924327', tag: 'huaqing-team-gateway:branding-base-4c7256f2756c'}
+        - {id: 'sha256:36b3ba389e32b26a210f8d0cbf468599fe24955b39892de667cbcf7d29b1228b', tag: 'huaqing-team-worker:branding-base-36b3ba389e32'}
+      changed_when: false
+    - name: Build the isolated images without network access or runtime volumes
+      ansible.builtin.command:
+        argv: [docker, '--host', '{{ services.harness.docker_socket }}', build, '--network', none, '--pull=false', '-f', 'Dockerfile.{{ item }}', '-t', 'huaqing-team-{{ item }}:0.2.1-rc.2-{{ brand_image_suffix }}', '.']
+        chdir: '{{ brand_build_root }}'
+      loop: [gateway, worker]
+      async: 600
+      poll: 5
+    - name: Smoke both supported profiles with their production users
+      ansible.builtin.command:
+        argv: [docker, '--host', '{{ services.harness.docker_socket }}', run, '--rm', '--network', none, '--read-only', '--tmpfs', '/tmp:rw,nosuid,nodev', '--user', '{{ item.user }}', '--env', 'DSH_HOME=/tmp/huaqing-brand-smoke', '--entrypoint', node, 'huaqing-team-{{ item.image }}:0.2.1-rc.2-{{ brand_image_suffix }}', /opt/dsh/node_modules/@deepseek-ai/dsh/lib/bin.js, '--profile', '{{ item.profile }}', '--help']
+      loop:
+        - {image: worker, profile: team-worker, user: "1000:1000"}
+        - {image: gateway, profile: team, user: "0:0"}
+      changed_when: false
+    - name: Read candidate image identities
+      ansible.builtin.command:
+        argv: [docker, '--host', '{{ services.harness.docker_socket }}', image, inspect, 'huaqing-team-{{ item }}:0.2.1-rc.2-{{ brand_image_suffix }}', '--format', '{{ "{{.Id}}" }}']
+      loop: [gateway, worker]
+      register: brand_candidates
+      changed_when: false
+    - name: Save only the immutable candidate identities
+      ansible.builtin.copy:
+        content: |
+          {{ {"sourceSHA256": brand_source_sha256, "gateway": brand_candidates.results[0].stdout | trim, "worker": brand_candidates.results[1].stdout | trim, "imageSuffix": brand_image_suffix} | to_nice_json }}
+        dest: '{{ playbook_dir }}/../reports/harness-brand-images.json'
+        mode: '0600'
+      delegate_to: localhost
+      become: false

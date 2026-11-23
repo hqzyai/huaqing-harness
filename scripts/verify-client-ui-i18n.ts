@@ -38,6 +38,8 @@ const IMMUTABLE_LANGUAGE_TOKENS = new Set([
   'B',
   'Function',
   'GB',
+  // The HQZY logomark has the same registered name in every locale.
+  'HQZY',
   'K',
   'KB',
   'M',

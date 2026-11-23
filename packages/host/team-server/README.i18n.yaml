@@ -1,0 +1,46 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/host/team-server/README.md
+/:
+  en: 846b29647bf1db97
+  zh: 8a5a4c55334039e9
+/deepseek-ai-dsh-host-team-server:
+  en: a88b0d7832520a0f
+  zh: 8fedcc4d14ba2500
+/deepseek-ai-dsh-host-team-server/summary:
+  en: 7429b29799604609
+  zh: 491a1e4aeaef3c24
+/deepseek-ai-dsh-host-team-server/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 0cd57b7b8d8c9b59
+/deepseek-ai-dsh-host-team-server/use-this-package:
+  en: 35d29ae9325c2450
+  zh: 12b51190dbde4f4b
+/deepseek-ai-dsh-host-team-server/understand-the-implementation:
+  en: 16268eee72ed0107
+  zh: d0db10e36ead4feb
+/deepseek-ai-dsh-host-team-server/further-exploration:
+  en: cf5b05224403163a
+  zh: 88e1ee8e8ec313d4
+/deepseek-ai-dsh-host-team-server/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-host-team-server/model-experience/authorized-inference:
+  en: 5dbe280f2a719b2d
+  zh: 4cad289b84c314c5
+/deepseek-ai-dsh-host-team-server/model-experience/authorized-inference/what-the-model-sees:
+  en: dffc643aa8d77d45
+  zh: d2d785460a9a5d50
+/deepseek-ai-dsh-host-team-server/model-experience/authorized-inference/token-effect:
+  en: 39adc7ddb4c6761a
+  zh: 68748f7aa3aac8a2
+/deepseek-ai-dsh-host-team-server/model-experience/authorized-inference/kv-cache-effect:
+  en: 8fa81f9f94375ec7
+  zh: 10a4e7f72e0b19aa
+/deepseek-ai-dsh-host-team-server/known-limitations-and-deferred-work:
+  en: e948e0e414b9aa5f
+  zh: c4f6baec19f7db42
+/deepseek-ai-dsh-host-team-server/known-limitations-and-deferred-work/dev-note:
+  en: e67f633dc6fe7773
+  zh: e158493cbe7c759c

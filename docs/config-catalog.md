@@ -1642,6 +1642,110 @@ export interface Config {
 ```
 <!-- END GENERATED config-catalog:@deepseek-ai/dsh-host-product-telemetry-otel -->
 
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-host-team-runtime -->
+<a id="deepseek-aidsh-host-team-runtime"></a>
+
+## `@deepseek-ai/dsh-host-team-runtime`
+
+- `inject`: `connection` · `webServer` · `llm`
+- `source`: [`packages/host/team-runtime/src/index.ts:18`](../packages/host/team-runtime/src/index.ts)
+
+```ts config-catalog
+/** Central control-plane location and refresh bounds. */
+export interface Config {
+  /** Control-plane origin reachable from this private worker. */
+  gatewayURL: string
+  /** Central catalog polling interval in milliseconds. */
+  refreshMs: number
+  /** Deadline for each catalog request in milliseconds. */
+  timeoutMs: number
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-host-team-runtime -->
+
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-host-team-server -->
+<a id="deepseek-aidsh-host-team-server"></a>
+
+## `@deepseek-ai/dsh-host-team-server`
+
+- `inject`: `webServer`
+- `source`: [`packages/host/team-server/src/index.ts:29`](../packages/host/team-server/src/index.ts)
+
+```ts config-catalog
+/** Deployment configuration. Secret files must be readable only by the control-plane operator. */
+export interface Config {
+  /** Private directory for the identity and model databases. */
+  dataDir: string
+  /** Public HTTPS origin; HTTP requires loopback or an explicitly enabled private IPv4 origin. */
+  publicOrigin: string
+  /** Permit unencrypted HTTP for a literal RFC 1918 IPv4 origin. Defaults to false. */
+  allowInsecureHttp: boolean
+  /** File containing the base64url-encoded 32-byte model credential encryption key. */
+  encryptionKeyFile: string
+  /** File containing the base64url-encoded 32-byte worker capability signing key. */
+  workerSecretFile: string
+  /** Initial administrator email, paired with bootstrapTokenFile. */
+  bootstrapEmail?: string
+  /** File containing the initial administrator activation token. */
+  bootstrapTokenFile?: string
+  /** Docker image used when creating a private user runtime. */
+  workerImage: string
+  /** Docker resource-name and ownership-label prefix for this deployment. */
+  workerPrefix: string
+  /** Control-plane origin reachable from a private worker. */
+  workerGatewayURL: string
+  /** Gateway container to join each user network; empty uses local loopback publishing. */
+  gatewayContainer: string
+  /** Docker memory limit for each user runtime, such as 2g. */
+  workerMemory: string
+  /** Docker CPU quota for each user runtime. */
+  workerCpus: number
+  /** Maximum processes in each user runtime. */
+  workerPids: number
+  /** Timeout in milliseconds for Docker operations and runtime readiness. */
+  startupTimeoutMs: number
+  /** Absolute browser-session lifetime in milliseconds. */
+  sessionTtlMs: number
+  /** Maximum browser-session inactivity in milliseconds. */
+  sessionIdleMs: number
+  /** Invitation and initial activation lifetime in milliseconds. */
+  inviteTtlMs: number
+  /** Password-reset link lifetime in milliseconds. */
+  resetTtlMs: number
+  /** Login attempt counting window in milliseconds. */
+  loginWindowMs: number
+  /** Allowed attempts per verified IP and normalized email within a login window. */
+  loginAttempts: number
+  /** Maximum encoded bytes in proxied requests and inference JSON. */
+  maxBodyBytes: number
+  /** Inference deadline and runtime proxy idle timeout in milliseconds. */
+  requestTimeoutMs: number
+  /** Authorization recheck interval for active transports in milliseconds. */
+  revokeCheckMs: number
+  /** Expired session, link and login-limit cleanup interval in milliseconds. */
+  maintenanceMs: number
+  /** Maximum simultaneous inference requests admitted for one user. */
+  maxInferencePerUser: number
+  /** Maximum simultaneous inference requests admitted by this control plane. */
+  maxInferenceTotal: number
+  /** Literal socket-peer IPs permitted to supply the login client X-Real-IP header. */
+  trustedProxyIPs: string[]
+  /** Maximum duration in milliseconds for one administrator model discovery. */
+  discoveryTimeoutMs: number
+  /** Maximum total provider response bytes admitted by one discovery, including pagination. */
+  discoveryMaxResponseBytes: number
+  /** Maximum model entries collected by one discovery. */
+  discoveryMaxModels: number
+  /** Maximum administrator model discovery requests admitted concurrently. */
+  maxDiscoveryRequests: number
+  /** Suggested per-reply output limit; provider capabilities remain authoritative. */
+  modelDefaultMaxTokens: number
+  /** Minimum true model context window accepted on catalog writes. */
+  modelMinimumContextWindow: number
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-host-team-server -->
+
 <!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-host-webserver -->
 <a id="deepseek-aidsh-host-webserver"></a>
 
@@ -3546,7 +3650,7 @@ export interface Config {
 ```ts config-catalog
 /** Plugin config: the deployment-authored fragment of the system prompt (see {@link Config.personaPrefix} for its contract). */
 export interface Config {
-  /** Include the fixed DeepSeek Harness identity before the deployment persona (default true). */
+  /** Include the fixed Huaqing Harness identity before the deployment persona (default true). */
   includeHarnessIdentity?: boolean
   /** Include optional runtime-context snapshots in model history (default true); required context remains. */
   includeRuntimeContext?: boolean
@@ -4645,6 +4749,7 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 | `@deepseek-ai/dsh-client-ui-sidebar-terminal` | — | [`packages/client/ui-sidebar-terminal/src/index.ts`](../packages/client/ui-sidebar-terminal/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-skill` | — | [`packages/client/ui-skill/src/index.ts`](../packages/client/ui-skill/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-subagent` | — | [`packages/client/ui-subagent/src/index.ts`](../packages/client/ui-subagent/src/index.ts) |
+| `@deepseek-ai/dsh-client-ui-team-account` | — | [`packages/client/ui-team-account/src/index.ts`](../packages/client/ui-team-account/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-tool` | — | [`packages/client/ui-tool/src/index.ts`](../packages/client/ui-tool/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-trajectory` | — | [`packages/client/ui-trajectory/src/index.ts`](../packages/client/ui-trajectory/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-user-questions` | — | [`packages/client/ui-user-questions/src/index.ts`](../packages/client/ui-user-questions/src/index.ts) |
@@ -4688,6 +4793,7 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 | `@deepseek-ai/dsh-storage` | — | [`packages/storage/storage/src/index.ts`](../packages/storage/storage/src/index.ts) |
 | `@deepseek-ai/dsh-subprocess-local` | — | [`packages/subprocess/subprocess-local/src/index.ts`](../packages/subprocess/subprocess-local/src/index.ts) |
 | `@deepseek-ai/dsh-subprocess-ssh` | `ssh` | [`packages/ssh/subprocess-ssh/src/index.ts`](../packages/ssh/subprocess-ssh/src/index.ts) |
+| `@deepseek-ai/dsh-team-app` | `cmdlineArgs` | [`packages/bundle/team-app/src/index.ts`](../packages/bundle/team-app/src/index.ts) |
 | `@deepseek-ai/dsh-terminal` | — | [`packages/terminal/terminal/src/index.ts`](../packages/terminal/terminal/src/index.ts) |
 | `@deepseek-ai/dsh-tool-call-timeout-policy` | `tools` | [`packages/guard/timeout-policy/src/index.ts`](../packages/guard/timeout-policy/src/index.ts) |
 | `@deepseek-ai/dsh-tool-cordis` | `tools` · `cordisInspect` | [`packages/extensions/tool-cordis/src/index.ts`](../packages/extensions/tool-cordis/src/index.ts) |
@@ -4788,6 +4894,9 @@ Imported as libraries by other packages; a `cordis.yml` cannot load them.
 | `@deepseek-ai/dsh-session-telemetry` | — | [`packages/session/session-telemetry/src/index.ts`](../packages/session/session-telemetry/src/index.ts) |
 | `@deepseek-ai/dsh-session-title-llm` | — | [`packages/session/session-title-llm/src/index.ts`](../packages/session/session-title-llm/src/index.ts) |
 | `@deepseek-ai/dsh-ssh-helper-runtime` | — | [`packages/ssh/ssh-helper-runtime/src/index.ts`](../packages/ssh/ssh-helper-runtime/src/index.ts) |
+| `@deepseek-ai/dsh-team-auth` | — | [`packages/identity/team-auth/src/index.ts`](../packages/identity/team-auth/src/index.ts) |
+| `@deepseek-ai/dsh-team-models` | — | [`packages/llm/team-models/src/index.ts`](../packages/llm/team-models/src/index.ts) |
+| `@deepseek-ai/dsh-team-worker` | — | [`packages/bundle/team-worker/src/index.ts`](../packages/bundle/team-worker/src/index.ts) |
 | `@deepseek-ai/dsh-timeout` | — | [`packages/util/timeout/src/index.ts`](../packages/util/timeout/src/index.ts) |
 | `@deepseek-ai/dsh-typert-generator` | — | [`packages/typert/generator/src/index.ts`](../packages/typert/generator/src/index.ts) |
 | `@deepseek-ai/dsh-typert-protocol` | — | [`packages/typert/protocol/src/index.ts`](../packages/typert/protocol/src/index.ts) |

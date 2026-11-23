@@ -1,0 +1,24 @@
+- insert:
+    - id: team-startup
+      name: '@deepseek-ai/dsh-team-app'
+    - id: webserver
+      name: '@deepseek-ai/dsh-host-webserver'
+      inject: [teamStartup]
+      config:
+        host: !!js process.env.TEAM_BIND_HOST || '127.0.0.1'
+        port: !!js Number(process.env.TEAM_PORT || 18410)
+    - id: team-server
+      name: '@deepseek-ai/dsh-host-team-server'
+      config:
+        dataDir: !!js process.env.TEAM_DATA_DIR
+        publicOrigin: !!js process.env.TEAM_PUBLIC_ORIGIN
+        allowInsecureHttp: !!js JSON.parse(process.env.TEAM_ALLOW_INSECURE_HTTP || 'false')
+        encryptionKeyFile: !!js process.env.TEAM_ENCRYPTION_KEY_FILE
+        workerSecretFile: !!js process.env.TEAM_WORKER_SECRET_FILE
+        bootstrapEmail: !!js process.env.TEAM_BOOTSTRAP_EMAIL
+        bootstrapTokenFile: !!js process.env.TEAM_BOOTSTRAP_TOKEN_FILE
+        workerImage: !!js process.env.TEAM_WORKER_IMAGE
+        workerPrefix: !!js process.env.TEAM_WORKER_PREFIX || 'hqzy'
+        workerGatewayURL: !!js process.env.TEAM_WORKER_GATEWAY_URL
+        gatewayContainer: !!js process.env.TEAM_GATEWAY_CONTAINER || ''
+        trustedProxyIPs: !!js (process.env.TEAM_TRUSTED_PROXY_IPS || '').split(',').filter(Boolean)

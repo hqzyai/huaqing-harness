@@ -151,7 +151,7 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.queryByText('DSH Local Build')).toBeNull()
+    expect(screen.queryByText('Huaqing Harness')).toBeNull()
     expect(screen.getByAltText('HQZY')).toBeTruthy()
     expect(container.querySelector('svg')).not.toBeNull()
   })
@@ -172,7 +172,7 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.queryByText('DSH Local Build')).toBeNull()
+    expect(screen.queryByText('Huaqing Harness')).toBeNull()
     expect(screen.queryByText(expected)).toBeNull()
     expect(screen.getByAltText('HQZY')).toBeTruthy()
   })
@@ -189,7 +189,7 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.queryByText('DSH Local Build')).toBeNull()
+    expect(screen.queryByText('Huaqing Harness')).toBeNull()
   })
 
   it('hands the region its wide flag and clamps expandSidebar to the collapsed state', () => {

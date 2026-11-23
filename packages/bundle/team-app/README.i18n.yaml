@@ -1,0 +1,46 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/bundle/team-app/README.md
+/:
+  en: 0cfe667ff11140d3
+  zh: 07192fb706d4cc70
+/deepseek-ai-dsh-team-app:
+  en: 58e6db402507ab06
+  zh: 6d54bad565e9fff6
+/deepseek-ai-dsh-team-app/summary:
+  en: 85d312dddcb0e154
+  zh: a0fe8db4a9a29fab
+/deepseek-ai-dsh-team-app/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 0cd57b7b8d8c9b59
+/deepseek-ai-dsh-team-app/use-this-package:
+  en: 65d7fd51aa86db80
+  zh: 54e77cfa62270261
+/deepseek-ai-dsh-team-app/understand-the-implementation:
+  en: b76e254a5585af49
+  zh: 64cded6d432f0a93
+/deepseek-ai-dsh-team-app/further-exploration:
+  en: 9fa75587468e58ce
+  zh: 351a3dce9a17df10
+/deepseek-ai-dsh-team-app/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-team-app/model-experience/control-plane-composition:
+  en: adbe8b7892030225
+  zh: ea5dfd6aa68e6ff7
+/deepseek-ai-dsh-team-app/model-experience/control-plane-composition/what-the-model-sees:
+  en: d271c8707363703b
+  zh: ec3456bbf3ccdeaa
+/deepseek-ai-dsh-team-app/model-experience/control-plane-composition/token-effect:
+  en: f60c3914eb63cbcf
+  zh: 347edd9a97837fd5
+/deepseek-ai-dsh-team-app/model-experience/control-plane-composition/kv-cache-effect:
+  en: ffef0fe9d4f06d66
+  zh: ea30f12e21baff01
+/deepseek-ai-dsh-team-app/known-limitations-and-deferred-work:
+  en: 0c0ef6a9c381507e
+  zh: 2ae2e1f92cc5b3c9
+/deepseek-ai-dsh-team-app/known-limitations-and-deferred-work/dev-note:
+  en: e67f633dc6fe7773
+  zh: e158493cbe7c759c

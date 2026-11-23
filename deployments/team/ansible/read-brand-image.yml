@@ -1,0 +1,38 @@
+- name: Read packaged Harness code without launching the application or mounting user data
+  hosts: workstations
+  gather_facts: false
+  tasks:
+    - name: Require the original workstation and one inventory-pinned Harness component
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - brand_code_component | default('') in services.harness.containers
+          - services.harness.directory == '/home/ubuntu/Workspace/huaqing-harness'
+          - services.harness.docker_socket == 'unix:///run/user/1001/huaqing-docker/docker.sock'
+    - name: Install the bounded public-code reader
+      ansible.builtin.copy:
+        src: read-brand-image.py
+        dest: /home/ubuntu/Workspace/.ansible-ops/read-harness-brand-image.py
+        mode: '0700'
+    - name: Extract only public package files from an unstarted temporary container
+      ansible.builtin.command:
+        argv: [/usr/bin/python3, /home/ubuntu/Workspace/.ansible-ops/read-harness-brand-image.py]
+        stdin: "{{ {'service': services.harness, 'component': brand_code_component} | to_json }}"
+      register: brand_code_result
+      changed_when: false
+      failed_when: false
+      no_log: true
+    - name: Fetch the public code archive through the Ansible connection
+      ansible.builtin.fetch:
+        src: '{{ (brand_code_result.stdout | from_json).archive }}'
+        dest: '{{ brand_code_destination }}/{{ brand_code_component }}.tar.gz'
+        flat: true
+      when: (brand_code_result.stdout | from_json).verified | bool
+    - name: Report only public code identities and archive checksum
+      ansible.builtin.debug:
+        msg: '{{ brand_code_result.stdout | from_json }}'
+    - name: Require public-code extraction to pass
+      ansible.builtin.assert:
+        that:
+          - brand_code_result.rc == 0
+          - (brand_code_result.stdout | from_json).verified | bool

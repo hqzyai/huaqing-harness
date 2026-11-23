@@ -38,6 +38,8 @@ python/**/.pytest_cache/
 packages/**/__pycache__/
 apps/web/dist/
 .artifacts/
+deployments/team/private/
+deployments/team/.env
 .dsh-build/
 .dsh-report/
 .playwright-mcp/

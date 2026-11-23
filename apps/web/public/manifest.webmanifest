@@ -1,12 +1,12 @@
 {
-  "name": "DeepSeek Harness",
-  "short_name": "DSH",
+  "name": "Huaqing Harness",
+  "short_name": "Huaqing",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
   "icons": [
     {
-      "src": "favicon.svg",
+      "src": "hqzyai-logomark.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

@@ -1,0 +1,47 @@
+{
+  "name": "@deepseek-ai/dsh-team-worker",
+  "version": "0.2.1-rc.2",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "lib/index.js",
+    "cordis.patch.yml",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:~"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "workspace:~"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-host-team-runtime": "workspace:*",
+    "@deepseek-ai/dsh-client-ui-team-account": "workspace:*",
+    "@deepseek-ai/dsh-client-ui-directory-picker-browse": "workspace:*",
+    "@deepseek-ai/dsh-host-directory-picker-browse": "workspace:*"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/bundle/team-worker"
+  }
+}

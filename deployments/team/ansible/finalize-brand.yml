@@ -1,0 +1,81 @@
+- name: Retain the accepted Harness source and managed startup state
+  hosts: workstations
+  gather_facts: false
+  tasks:
+    - name: Require accepted business and release checks for this exact service
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - brand_finalize_confirm | default(false) | bool
+          - brand_source_overlay_sha256 is match('^[0-9a-f]{64}$')
+          - (lookup('file', playbook_dir + '/../reports/harness-brand-verify.json') | from_json).phase == 'verified'
+          - (lookup('file', playbook_dir + '/../reports/harness-brand-live.json') | from_json).success | bool
+    - name: Resolve the exact Compose service hashes used by the existing startup unit
+      ansible.builtin.command:
+        argv: [docker, '--host', 'unix:///run/user/1001/huaqing-docker/docker.sock', compose, '-f', /home/ubuntu/Workspace/huaqing-harness/ops/compose.switch.json, config, '--hash', '{{ item }}']
+        chdir: /home/ubuntu/Workspace/huaqing-harness/ops
+      loop: [gateway, edge]
+      register: brand_startup_hashes
+      changed_when: false
+    - name: Read only the running containers' Compose service hashes
+      ansible.builtin.command:
+        argv: [docker, '--host', 'unix:///run/user/1001/huaqing-docker/docker.sock', inspect, 'huaqing-team-{{ item }}', '--format', '{{ "{{json .Config.Labels}}" }}']
+      loop: [gateway, edge]
+      register: brand_running_hashes
+      changed_when: false
+      no_log: true
+    - name: Require startup reconciliation to preserve the accepted containers
+      ansible.builtin.assert:
+        that:
+          - brand_startup_hashes.results[item].stdout.split()[-1] == (brand_running_hashes.results[item].stdout | from_json)['com.docker.compose.config-hash']
+      loop: [0, 1]
+    - name: Clear only the pre-existing failed Harness startup state
+      ansible.builtin.command:
+        argv: [systemctl, '--user', reset-failed, huaqing-harness.service]
+      changed_when: false
+    - name: Reconcile only the existing Harness startup unit with its accepted Compose file
+      ansible.builtin.command:
+        argv: [systemctl, '--user', start, huaqing-harness.service]
+      changed_when: false
+    - name: Require the existing Harness startup unit to be active
+      ansible.builtin.command:
+        argv: [systemctl, '--user', is-active, huaqing-harness.service]
+      changed_when: false
+    - name: Require the existing Harness startup unit to remain enabled
+      ansible.builtin.command:
+        argv: [systemctl, '--user', is-enabled, huaqing-harness.service]
+      changed_when: false
+    - name: Verify the accepted public application health
+      ansible.builtin.uri:
+        url: http://192.168.2.11:28003/team/health
+        use_proxy: false
+        status_code: 200
+        return_content: true
+      register: brand_final_health
+    - name: Require a healthy control plane
+      ansible.builtin.assert:
+        that: brand_final_health.json.ok | bool
+    - name: Retain the credential-free source overlay beside the existing deliveries
+      ansible.builtin.copy:
+        src: /Users/jiawy/Documents/huaqing-harness/.artifacts/branding/source-branding-20261103.tar.gz
+        dest: /home/ubuntu/Workspace/huaqing-harness-source-branding-20261103.tar.gz
+        mode: '0600'
+    - name: Verify the server source archive checksum
+      ansible.builtin.stat:
+        path: /home/ubuntu/Workspace/huaqing-harness-source-branding-20261103.tar.gz
+        checksum_algorithm: sha256
+      register: brand_final_source
+    - name: Require the exact reviewed source overlay
+      ansible.builtin.assert:
+        that: brand_final_source.stat.checksum == brand_source_overlay_sha256
+    - name: Retain the verified source metadata
+      ansible.builtin.copy:
+        src: /Users/jiawy/Documents/huaqing-harness/.artifacts/branding/source-branding-20261103.manifest.json
+        dest: /home/ubuntu/Workspace/huaqing-harness-source-branding-20261103.manifest.json
+        mode: '0600'
+    - name: Retain a checksum using the delivered source filename
+      ansible.builtin.copy:
+        content: |
+          {{ brand_source_overlay_sha256 }}  huaqing-harness-source-branding-20261103.tar.gz
+        dest: /home/ubuntu/Workspace/huaqing-harness-source-branding-20261103.tar.gz.sha256
+        mode: '0600'

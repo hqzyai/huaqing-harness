@@ -159,6 +159,13 @@
     "@deepseek-ai/dsh-workspace": "workspace:*",
     "@deepseek-ai/schemastery": "workspace:~",
     "@deepseek-ai/dsh-tool-working-directory": "workspace:*",
-    "@deepseek-ai/dsh-working-directory": "workspace:*"
+    "@deepseek-ai/dsh-working-directory": "workspace:*",
+    "@deepseek-ai/dsh-team-app": "workspace:*",
+    "@deepseek-ai/dsh-team-worker": "workspace:*",
+    "@deepseek-ai/dsh-team-auth": "workspace:*",
+    "@deepseek-ai/dsh-team-models": "workspace:*",
+    "@deepseek-ai/dsh-host-team-server": "workspace:*",
+    "@deepseek-ai/dsh-host-team-runtime": "workspace:*",
+    "@deepseek-ai/dsh-client-ui-team-account": "workspace:*"
   }
 }

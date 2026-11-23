@@ -1,5 +1,5 @@
 ---
-description: "面向 Web GUI 用户与维护者的模型上下文：给出 DeepSeek Harness checkout 与 GUI URL，且两者都不会改变系统提示词。"
+description: "面向 Web GUI 用户与维护者的模型上下文：给出 Huaqing Harness checkout 与 GUI URL，且两者都不会改变系统提示词。"
 kind: "package-reference"
 ---
 
@@ -9,7 +9,7 @@ kind: "package-reference"
 
 ## 概述
 
-`dsh-harness-dev-context` 告诉运行在 DeepSeek Harness Web GUI 背后的 agent：harness 实现 checkout 在哪里、GUI 与「this page」是什么关系，以及哪个 URL 提供该 GUI。系统提示词只包含不含值的说明；当前 checkout 路径与 GUI URL 以运行时上下文送达，因此从别的 checkout、端口或安装位置启动进程，绝不会改写会话已记录的系统提示词。提示词仍嵌有早期版本这些值的会话会原样保留那段文本。
+`dsh-harness-dev-context` 告诉运行在 Huaqing Harness Web GUI 背后的 agent：harness 实现 checkout 在哪里、GUI 与「this page」是什么关系，以及哪个 URL 提供该 GUI。系统提示词只包含不含值的说明；当前 checkout 路径与 GUI URL 以运行时上下文送达，因此从别的 checkout、端口或安装位置启动进程，绝不会改写会话已记录的系统提示词。提示词仍嵌有早期版本这些值的会话会保留旧路径与 URL，并渲染当前产品名称。
 
 ## 目录
 
@@ -33,7 +33,7 @@ kind: "package-reference"
 
 ### 早期版本的会话
 
-早期版本把两个值都嵌在系统提示词里。会话最新的非空系统提示词仍含那两段原文时，两个段落会原样重复它们（包括旧值），因此升级以及之后更换端口或 checkout 都不会改变该会话提示词的任何字节；运行时上下文行仍给出当前值。只是看起来像早期段落的文本会得到当前说明。
+早期版本把两个值都嵌在系统提示词里。会话最新的非空系统提示词包含那两段原文时，段落会保留旧路径与 URL，并使用当前产品名称。agent 循环会记录更新后的系统提示词，不会修改历史事件。之后更换端口或 checkout 不会改变该渲染；运行时上下文行给出当前值。只是看起来像早期段落的文本会得到当前说明。
 
 -----
 
@@ -47,7 +47,7 @@ kind: "package-reference"
 
 ### 设计思路
 
-仅限宿主的会话投影 `harnessDevLegacyPrompt` 把每个已提交的非空 `system/message` 折叠为其中包含的早期格式段落，按值两侧的固定文本在同一行内匹配。段落文本提供函数通过 `AssembleContext.agent` 读取该状态；没有 agent 的组装使用当前说明。会话恢复时该投影与其他单元一起恢复，因此不同步读取任何历史事件。
+仅限宿主的会话投影 `harnessDevLegacyPrompt` 把每个已提交的非空 `system/message` 折叠为其中包含的早期格式段落，按值两侧的固定文本在同一行内匹配，兼容早期和当前产品名称。只规范固定的产品名称前缀，路径与 URL 保留原文。段落文本提供函数通过 `AssembleContext.agent` 读取该状态；没有 agent 的组装使用当前说明。会话恢复时该投影与其他单元一起恢复，因此不同步读取任何历史事件。状态版本 2 使早期缓存段落失效，并使用当前产品名称重新折叠已存储的事件。
 
 ### 源码地图
 
@@ -82,22 +82,22 @@ kind: "package-reference"
 
 #### 模型看到什么
 
-两个系统提示词段落，位于可复用指令之后的第一方顺序 10000 与 10100；两行运行时上下文，位于上下文顺序 200 与 210。在早期版本下提交过提示词的会话看到的是自己的早期段落，而不是下面两段。
+两个系统提示词段落，位于可复用指令之后的第一方顺序 10000 与 10100；两行运行时上下文，位于上下文顺序 200 与 210。在早期版本下提交过提示词的会话看到的是使用当前产品名称的早期含值段落，而不是下面两段。
 
 ##### 系统提示词段落
 
 ```markdown
-The runtime context names the DeepSeek Harness implementation checkout. The checkout location and current working directory are separate values and may differ; never infer the working directory from the checkout path. Use pwd to determine the current working directory. Use this checkout only to inspect or extend DSH itself.
+The runtime context names the Huaqing Harness implementation checkout. The checkout location and current working directory are separate values and may differ; never infer the working directory from the checkout path. Use pwd to determine the current working directory. Use this checkout only to inspect or extend DSH itself.
 
-You are interacting with the user through the DeepSeek Harness Web GUI whose URL the runtime context names. When the user refers to "this page", "this GUI", or "this app" without naming another target, they mean this GUI. The browser provides no implicit DOM, route, or screenshot context. The client-plugin HMR receiver is active, but client-plugin changes reload without a refresh only while `pnpm run dev:web` is also running from this same checkout to rebuild their bundles; verify that watcher before promising automatic updates. Every other change — the apps/web shell and plain packages — requires rebuilding the affected Web artifacts and verifying this existing URL after a page refresh. Starting another server does not update this GUI. The apps/web Vite entry builds the shell but is not a standalone application because only dsh web injects window.__DSH_BOOT__. Do not start a replacement server unless the user asks; if one is needed, use a managed background job and verify its exact URL.
+You are interacting with the user through the Huaqing Harness Web GUI whose URL the runtime context names. When the user refers to "this page", "this GUI", or "this app" without naming another target, they mean this GUI. The browser provides no implicit DOM, route, or screenshot context. The client-plugin HMR receiver is active, but client-plugin changes reload without a refresh only while `pnpm run dev:web` is also running from this same checkout to rebuild their bundles; verify that watcher before promising automatic updates. Every other change — the apps/web shell and plain packages — requires rebuilding the affected Web artifacts and verifying this existing URL after a page refresh. Starting another server does not update this GUI. The apps/web Vite entry builds the shell but is not a standalone application because only dsh web injects window.__DSH_BOOT__. Do not start a replacement server unless the user asks; if one is needed, use a managed background job and verify its exact URL.
 ```
 
 ##### 运行时上下文行
 
 ```markdown
-Current DeepSeek Harness implementation checkout: "<installation root>".
+Current Huaqing Harness implementation checkout: "<installation root>".
 
-Current DeepSeek Harness Web GUI URL: "<advertised URL>".
+Current Huaqing Harness Web GUI URL: "<advertised URL>".
 ```
 
 #### Token 影响
@@ -119,7 +119,7 @@ Current DeepSeek Harness Web GUI URL: "<advertised URL>".
 - **混用版本**——不含本包的版本会改写以本包启动的会话的第一条 system 消息，因此共用同一 `DSH_HOME` 的每个 checkout 都需要先包含本包，才能交替运行。
 - **可选值**——两行运行时上下文是可选的，因此设置 `includeRuntimeContext: false` 但未设置 `complete: true` 的自定义 persona 会保留指向其请求从不携带之值的段落。随附的 `minimal` persona 两者都设置。
 - **没有段落的会话**——在 `surfaceContext: false` 隐藏两段时创建的会话，日志中两段都没有，因此恢复后的第一个请求会加入新段落，并在不支持 in-history 提示词更新的路由上改写第一条 system 消息。
-- **只认一版早期措辞**——投影按本包之前紧邻的版本渲染的段落识别；保存更早措辞的会话会得到当前说明。
+- **只认一版早期措辞**——投影识别早期和当前产品名称下的固定含值段落；保存更早措辞的会话会得到当前说明。
 
 <a id="dev-note"></a>
 ### 开发备注

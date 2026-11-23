@@ -1,0 +1,50 @@
+- name: Deliver only the existing Harness service images with the requested name
+  hosts: workstations
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: Require the original service and one explicit delivery action
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - harness_delivery_action | default('plan') in ['plan', 'apply']
+          - harness_delivery_action | default('plan') == 'plan' or harness_delivery_confirm | default(false) | bool
+    - name: Maintain the reviewed generic image exporter
+      ansible.builtin.copy:
+        src: ../files/service_ops.py
+        dest: /home/ubuntu/Workspace/.ansible-ops/service_ops.py
+        mode: '0700'
+    - name: Maintain the bounded Harness delivery helper
+      ansible.builtin.copy:
+        src: ../files/harness_image_delivery.py
+        dest: /home/ubuntu/Workspace/.ansible-ops/harness_image_delivery.py
+        mode: '0700'
+    - name: Plan or apply the exact image delivery and old-file retention
+      ansible.builtin.command:
+        argv: [/usr/bin/python3, /home/ubuntu/Workspace/.ansible-ops/harness_image_delivery.py]
+        stdin: "{{ {'service': services.harness, 'action': harness_delivery_action | default('plan'), 'confirm': harness_delivery_confirm | default(false) | bool, 'receiptId': harness_delivery_receipt | default('')} | to_json }}"
+      register: harness_delivery_result
+      no_log: true
+      changed_when: harness_delivery_action | default('plan') == 'apply'
+      failed_when: false
+      when: not ansible_check_mode
+    - name: Retain the credential-free delivery receipt
+      ansible.builtin.copy:
+        content: |
+          {{ harness_delivery_result.stdout }}
+        dest: '{{ playbook_dir }}/../reports/harness-image-delivery-{{ harness_delivery_action | default("plan") }}.json'
+        mode: '0600'
+      delegate_to: localhost
+      become: false
+      when: not ansible_check_mode
+    - name: Show the exact artifact and retention paths
+      ansible.builtin.debug:
+        msg: '{{ harness_delivery_result.stdout | from_json }}'
+      when: not ansible_check_mode
+    - name: Require the selected delivery stage to pass
+      ansible.builtin.assert:
+        that:
+          - harness_delivery_result.rc == 0
+          - (harness_delivery_result.stdout | from_json).verified | bool
+        fail_msg: Harness image delivery failed; no Docker container, image or volume deletion is performed.
+      when: not ansible_check_mode

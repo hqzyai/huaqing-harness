@@ -1,0 +1,38 @@
+- name: Read back the completed Harness image delivery
+  hosts: workstations
+  gather_facts: false
+  tasks:
+    - name: Require the original service and exact completed delivery
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - harness_delivery_receipt is match('^[0-9a-f]{32}$')
+    - name: Maintain the read-only image delivery verifier
+      ansible.builtin.copy:
+        src: ../files/verify_harness_image_delivery.py
+        dest: /home/ubuntu/Workspace/.ansible-ops/verify_harness_image_delivery.py
+        mode: '0700'
+    - name: Verify the exact artifact sidecars retained files and running service
+      ansible.builtin.command:
+        argv: [/usr/bin/python3, /home/ubuntu/Workspace/.ansible-ops/verify_harness_image_delivery.py]
+        stdin: "{{ {'service': services.harness, 'receiptId': harness_delivery_receipt} | to_json }}"
+      register: image_delivery_readback
+      changed_when: false
+      failed_when: false
+      no_log: true
+    - name: Retain the credential-free final readback
+      ansible.builtin.copy:
+        content: |
+          {{ image_delivery_readback.stdout }}
+        dest: '{{ playbook_dir }}/../reports/harness-image-delivery-readback.json'
+        mode: '0600'
+      delegate_to: localhost
+      become: false
+    - name: Show only artifact and health verification metadata
+      ansible.builtin.debug:
+        msg: '{{ image_delivery_readback.stdout | from_json }}'
+    - name: Require the delivery readback to pass
+      ansible.builtin.assert:
+        that:
+          - image_delivery_readback.rc == 0
+          - (image_delivery_readback.stdout | from_json).verified | bool

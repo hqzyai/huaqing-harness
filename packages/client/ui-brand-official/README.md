@@ -1,5 +1,5 @@
 ---
-description: "Official DeepSeek Harness brand occupants for the sidebar, active only in official builds; for users and maintainers choosing or replacing brand presentation."
+description: "Official Huaqing Harness brand occupants for the sidebar, active only in official builds; for users and maintainers choosing or replacing brand presentation."
 kind: "package-reference"
 ---
 
