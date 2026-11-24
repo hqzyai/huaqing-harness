@@ -1,0 +1,46 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/host/team-runtime/README.md
+/:
+  en: c2fc233fe4902ac9
+  zh: d71b593c73735a92
+/deepseek-ai-dsh-host-team-runtime:
+  en: 1cbdeefacb143de2
+  zh: d06e352d89432821
+/deepseek-ai-dsh-host-team-runtime/summary:
+  en: e7a117cd8accf2dd
+  zh: 47f77cdebcd9f35a
+/deepseek-ai-dsh-host-team-runtime/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 0cd57b7b8d8c9b59
+/deepseek-ai-dsh-host-team-runtime/use-this-package:
+  en: b6d715234f1ca4b8
+  zh: 9f62872fbc552aa0
+/deepseek-ai-dsh-host-team-runtime/understand-the-implementation:
+  en: aa1d2d7b9972bda7
+  zh: bed47e03ca5cec82
+/deepseek-ai-dsh-host-team-runtime/further-exploration:
+  en: b253964f169c74bc
+  zh: d6b29b904f117fff
+/deepseek-ai-dsh-host-team-runtime/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-host-team-runtime/model-experience/central-model-selection:
+  en: ed97012bd6f88021
+  zh: 288983f786dbf2d7
+/deepseek-ai-dsh-host-team-runtime/model-experience/central-model-selection/what-the-model-sees:
+  en: 256c9712dc20b1df
+  zh: a6fb5fc91bde29da
+/deepseek-ai-dsh-host-team-runtime/model-experience/central-model-selection/token-effect:
+  en: 99b0b02cc9d18487
+  zh: c529e40ba692cc2a
+/deepseek-ai-dsh-host-team-runtime/model-experience/central-model-selection/kv-cache-effect:
+  en: 662b86fa2ab76ebd
+  zh: cd89f7f90e78b260
+/deepseek-ai-dsh-host-team-runtime/known-limitations-and-deferred-work:
+  en: 4b44fa45c522e547
+  zh: 01d74217df09bb05
+/deepseek-ai-dsh-host-team-runtime/known-limitations-and-deferred-work/dev-note:
+  en: e67f633dc6fe7773
+  zh: e158493cbe7c759c

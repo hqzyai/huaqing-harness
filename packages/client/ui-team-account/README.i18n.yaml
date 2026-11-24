@@ -1,0 +1,46 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/client/ui-team-account/README.md
+/:
+  en: f3a0379ee4db2836
+  zh: 1ed1cd0d8c4d372c
+/deepseek-ai-dsh-client-ui-team-account:
+  en: 6fc29510944b4f1c
+  zh: 75baec9e568504f5
+/deepseek-ai-dsh-client-ui-team-account/summary:
+  en: 3150739004095ad5
+  zh: cbfafec722db0ddb
+/deepseek-ai-dsh-client-ui-team-account/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 0cd57b7b8d8c9b59
+/deepseek-ai-dsh-client-ui-team-account/use-this-package:
+  en: 34304d3c57406cc4
+  zh: 9e503ac5235d38e4
+/deepseek-ai-dsh-client-ui-team-account/understand-the-implementation:
+  en: a900a469fa7563ba
+  zh: 3d5b3ba7be1a6586
+/deepseek-ai-dsh-client-ui-team-account/further-exploration:
+  en: 95df6b5ed575abd5
+  zh: 4c64011ff1e1aaa9
+/deepseek-ai-dsh-client-ui-team-account/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-client-ui-team-account/model-experience/account-navigation:
+  en: c18c87e7c2d5f332
+  zh: 7bc6cba007a9f5f5
+/deepseek-ai-dsh-client-ui-team-account/model-experience/account-navigation/what-the-model-sees:
+  en: 3370fde6b3c5a5b7
+  zh: d213b76ad2c58214
+/deepseek-ai-dsh-client-ui-team-account/model-experience/account-navigation/token-effect:
+  en: 9defcba667c9c752
+  zh: e7dc712c5a45172b
+/deepseek-ai-dsh-client-ui-team-account/model-experience/account-navigation/kv-cache-effect:
+  en: fcf0a23436b983d2
+  zh: 47246e2c7261a49c
+/deepseek-ai-dsh-client-ui-team-account/known-limitations-and-deferred-work:
+  en: 3e8023a5f9a8a37f
+  zh: 737d81d7bd5acee5
+/deepseek-ai-dsh-client-ui-team-account/known-limitations-and-deferred-work/dev-note:
+  en: e67f633dc6fe7773
+  zh: e158493cbe7c759c

@@ -1,0 +1,102 @@
+name: huaqing-team
+services:
+  edge:
+    build:
+      context: ../..
+      dockerfile: deployments/team/edge.Dockerfile
+    image: huaqing-team-edge:0.2.1-rc.2
+    container_name: huaqing-team-edge
+    restart: unless-stopped
+    user: '1000:1000'
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,size=16777216
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    ports:
+      - 127.0.0.1:18410:18410
+    environment:
+      TEAM_EDGE_TRUSTED_PROXY_IPS: ${TEAM_TRUSTED_PROXY_IPS:-127.0.0.1 ::1}
+    volumes:
+      - ./edge.caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      control:
+        ipv4_address: ${TEAM_EDGE_IP:-172.30.0.2}
+    depends_on:
+      gateway:
+        condition: service_healthy
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.5
+  gateway:
+    build:
+      context: ../..
+      dockerfile: deployments/team/Dockerfile
+      target: gateway
+      args:
+        DSH_BUILD_COMMIT: ${DSH_BUILD_COMMIT:?Set the source Git commit}
+    image: huaqing-team-gateway:0.2.1-rc.2
+    container_name: huaqing-team-gateway
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,size=268435456
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    environment:
+      TEAM_PORT: '18410'
+      TEAM_PUBLIC_ORIGIN: ${TEAM_PUBLIC_ORIGIN:?Set the public HTTPS origin}
+      TEAM_ALLOW_INSECURE_HTTP: ${TEAM_ALLOW_INSECURE_HTTP:-false}
+      TEAM_DATA_DIR: /var/lib/hqzy/data
+      TEAM_ENCRYPTION_KEY_FILE: /run/secrets/encryption-key
+      TEAM_WORKER_SECRET_FILE: /run/secrets/worker-secret
+      TEAM_BOOTSTRAP_EMAIL: ${TEAM_BOOTSTRAP_EMAIL:?Set the initial administrator email}
+      TEAM_BOOTSTRAP_TOKEN_FILE: /run/secrets/bootstrap-token
+      TEAM_WORKER_IMAGE: huaqing-team-worker:0.2.1-rc.2
+      TEAM_WORKER_GATEWAY_URL: http://hqzy-control:18411
+      TEAM_GATEWAY_CONTAINER: huaqing-team-gateway
+      TEAM_CONTROL_NETWORK: ${TEAM_CONTROL_NETWORK:-huaqing-team-control}
+      TEAM_TRUSTED_PROXY_IPS: ${TEAM_EDGE_IP:-172.30.0.2}
+    volumes:
+      - team-control:/var/lib/hqzy
+      # A dedicated rootless Docker daemon is required for production.
+      - ${TEAM_DOCKER_SOCKET:?Set the dedicated rootless Docker socket}:/var/run/docker.sock
+    secrets:
+      - encryption-key
+      - worker-secret
+      - bootstrap-token
+    networks:
+      control:
+        gw_priority: 1
+        ipv4_address: ${TEAM_GATEWAY_IP:-172.30.0.3}
+    pids_limit: 256
+    mem_limit: 2g
+    cpus: 2
+    healthcheck:
+      test:
+        - CMD
+        - /usr/local/bin/hqzy-gateway
+        - healthcheck
+      interval: 30s
+      timeout: 5s
+      start_period: 120s
+      retries: 3
+secrets:
+  encryption-key:
+    file: ./private/encryption-key
+  worker-secret:
+    file: ./private/worker-secret
+  bootstrap-token:
+    file: ./private/bootstrap-token
+volumes:
+  team-control:
+networks:
+  control:
+    name: ${TEAM_CONTROL_NETWORK:-huaqing-team-control}
+    ipam:
+      config:
+        - subnet: ${TEAM_CONTROL_SUBNET:-172.30.0.0/24}

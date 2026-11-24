@@ -281,6 +281,9 @@ importers:
       '@deepseek-ai/dsh-client-ui-cordis':
         specifier: workspace:*
         version: link:../../packages/extensions/ui-cordis
+      '@deepseek-ai/dsh-client-ui-team-account':
+        specifier: workspace:*
+        version: link:../../packages/client/ui-team-account
       '@deepseek-ai/dsh-cmdline':
         specifier: workspace:*
         version: link:../../packages/boot/cmdline
@@ -353,6 +356,12 @@ importers:
       '@deepseek-ai/dsh-home-paths':
         specifier: workspace:*
         version: link:../../packages/util/home-paths
+      '@deepseek-ai/dsh-host-team-runtime':
+        specifier: workspace:*
+        version: link:../../packages/host/team-runtime
+      '@deepseek-ai/dsh-host-team-server':
+        specifier: workspace:*
+        version: link:../../packages/host/team-server
       '@deepseek-ai/dsh-http-proxy':
         specifier: workspace:*
         version: link:../../packages/util/http-proxy
@@ -407,6 +416,18 @@ importers:
       '@deepseek-ai/dsh-skill-office':
         specifier: workspace:*
         version: link:../../packages/skill/skill-office
+      '@deepseek-ai/dsh-team-app':
+        specifier: workspace:*
+        version: link:../../packages/bundle/team-app
+      '@deepseek-ai/dsh-team-auth':
+        specifier: workspace:*
+        version: link:../../packages/identity/team-auth
+      '@deepseek-ai/dsh-team-models':
+        specifier: workspace:*
+        version: link:../../packages/llm/team-models
+      '@deepseek-ai/dsh-team-worker':
+        specifier: workspace:*
+        version: link:../../packages/bundle/team-worker
       '@deepseek-ai/dsh-terminal':
         specifier: workspace:*
         version: link:../../packages/terminal/terminal
@@ -2686,6 +2707,44 @@ importers:
         specifier: workspace:~
         version: link:../../../vendor/cordis
 
+  packages/bundle/team-app:
+    dependencies:
+      '@deepseek-ai/dsh-cmdline':
+        specifier: workspace:*
+        version: link:../../boot/cmdline
+      '@deepseek-ai/dsh-host-team-server':
+        specifier: workspace:*
+        version: link:../../host/team-server
+      '@deepseek-ai/dsh-host-webserver':
+        specifier: workspace:*
+        version: link:../../host/webserver
+      commander:
+        specifier: ^15.0.0
+        version: 15.0.0
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:~
+        version: link:../../../vendor/cordis
+
+  packages/bundle/team-worker:
+    dependencies:
+      '@deepseek-ai/dsh-client-ui-directory-picker-browse':
+        specifier: workspace:*
+        version: link:../../client/ui-directory-picker-browse
+      '@deepseek-ai/dsh-client-ui-team-account':
+        specifier: workspace:*
+        version: link:../../client/ui-team-account
+      '@deepseek-ai/dsh-host-directory-picker-browse':
+        specifier: workspace:*
+        version: link:../../host/directory-picker-browse
+      '@deepseek-ai/dsh-host-team-runtime':
+        specifier: workspace:*
+        version: link:../../host/team-runtime
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:~
+        version: link:../../../vendor/cordis
+
   packages/bundle/web-app:
     dependencies:
       '@deepseek-ai/dsh-agent-instructions':
@@ -4781,6 +4840,9 @@ importers:
       katex:
         specifier: ^0.18.7
         version: 0.18.7
+      lucide-react:
+        specifier: 1.61.0
+        version: 1.61.0(@types/react@18.3.31)(react@18.3.1)
       mdast-util-from-markdown:
         specifier: ^2.0.3
         version: 2.0.3(supports-color@9.4.0)
@@ -6118,6 +6180,36 @@ importers:
       '@deepseek-ai/dsh-token-meter':
         specifier: workspace:*
         version: link:../../llm/token-meter
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
+
+  packages/client/ui-team-account:
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:~
+        version: link:../../../vendor/cordis
+      '@deepseek-ai/dsh-client-connection':
+        specifier: workspace:*
+        version: link:../connection
+      '@deepseek-ai/dsh-client-locale':
+        specifier: workspace:*
+        version: link:../locale
+      '@deepseek-ai/dsh-client-ui-primitives':
+        specifier: workspace:*
+        version: link:../ui-primitives
+      '@deepseek-ai/dsh-client-ui-renderer':
+        specifier: workspace:*
+        version: link:../ui-renderer
+      '@deepseek-ai/dsh-client-ui-settings':
+        specifier: workspace:*
+        version: link:../ui-settings
+      '@deepseek-ai/dsh-client-ui-slots':
+        specifier: workspace:*
+        version: link:../ui-slots
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -10654,6 +10746,62 @@ importers:
         specifier: workspace:*
         version: link:../../telemetry/otel
 
+  packages/host/team-runtime:
+    dependencies:
+      '@deepseek-ai/dsh-client-connection':
+        specifier: workspace:*
+        version: link:../../client/connection
+      '@deepseek-ai/dsh-home-paths':
+        specifier: workspace:*
+        version: link:../../util/home-paths
+      '@deepseek-ai/dsh-host-webserver':
+        specifier: workspace:*
+        version: link:../webserver
+      '@deepseek-ai/dsh-launch-environment':
+        specifier: workspace:*
+        version: link:../../util/launch-environment
+      '@deepseek-ai/dsh-llm-pi-ai':
+        specifier: workspace:*
+        version: link:../../llm/llm-pi-ai
+      '@deepseek-ai/dsh-team-models':
+        specifier: workspace:*
+        version: link:../../llm/team-models
+      '@deepseek-ai/schemastery':
+        specifier: link:../../../vendor/schemastery
+        version: link:../../../vendor/schemastery
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:~
+        version: link:../../../vendor/cordis
+      '@deepseek-ai/dsh-llm':
+        specifier: workspace:*
+        version: link:../../llm/llm
+
+  packages/host/team-server:
+    dependencies:
+      '@deepseek-ai/dsh-client-ui-theme':
+        specifier: workspace:*
+        version: link:../../client/ui-theme
+      '@deepseek-ai/dsh-host-webserver':
+        specifier: workspace:*
+        version: link:../webserver
+      '@deepseek-ai/dsh-team-auth':
+        specifier: workspace:*
+        version: link:../../identity/team-auth
+      '@deepseek-ai/dsh-team-models':
+        specifier: workspace:*
+        version: link:../../llm/team-models
+      '@deepseek-ai/dsh-web-frontend':
+        specifier: workspace:*
+        version: link:../../../apps/web
+      '@deepseek-ai/schemastery':
+        specifier: link:../../../vendor/schemastery
+        version: link:../../../vendor/schemastery
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:~
+        version: link:../../../vendor/cordis
+
   packages/host/webserver:
     dependencies:
       '@deepseek-ai/schemastery':
@@ -10693,6 +10841,16 @@ importers:
       '@deepseek-ai/dsh-home-paths':
         specifier: workspace:*
         version: link:../../util/home-paths
+
+  packages/identity/team-auth:
+    dependencies:
+      '@deepseek-ai/dsh-brand':
+        specifier: workspace:*
+        version: link:../../util/brand
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:~
+        version: link:../../../vendor/cordis
 
   packages/interaction/commands:
     dependencies:
@@ -11310,6 +11468,12 @@ importers:
       '@deepseek-ai/dsh-session-projection':
         specifier: workspace:*
         version: link:../../session/session-projection
+
+  packages/llm/team-models:
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:~
+        version: link:../../../vendor/cordis
 
   packages/llm/token-meter:
     dependencies:
@@ -15559,6 +15723,9 @@ importers:
       '@deepseek-ai/dsh-client-file-upload':
         specifier: workspace:*
         version: link:../../packages/client/file-upload
+      '@deepseek-ai/dsh-client-ui-team-account':
+        specifier: workspace:*
+        version: link:../../packages/client/ui-team-account
       '@deepseek-ai/dsh-cmdline':
         specifier: workspace:*
         version: link:../../packages/boot/cmdline
@@ -15628,6 +15795,12 @@ importers:
       '@deepseek-ai/dsh-host-plugin-inventory':
         specifier: workspace:*
         version: link:../../packages/host/plugin-inventory
+      '@deepseek-ai/dsh-host-team-runtime':
+        specifier: workspace:*
+        version: link:../../packages/host/team-runtime
+      '@deepseek-ai/dsh-host-team-server':
+        specifier: workspace:*
+        version: link:../../packages/host/team-server
       '@deepseek-ai/dsh-host-webserver':
         specifier: workspace:*
         version: link:../../packages/host/webserver
@@ -15811,6 +15984,18 @@ importers:
       '@deepseek-ai/dsh-system-prompt':
         specifier: workspace:*
         version: link:../../packages/core/system-prompt
+      '@deepseek-ai/dsh-team-app':
+        specifier: workspace:*
+        version: link:../../packages/bundle/team-app
+      '@deepseek-ai/dsh-team-auth':
+        specifier: workspace:*
+        version: link:../../packages/identity/team-auth
+      '@deepseek-ai/dsh-team-models':
+        specifier: workspace:*
+        version: link:../../packages/llm/team-models
+      '@deepseek-ai/dsh-team-worker':
+        specifier: workspace:*
+        version: link:../../packages/bundle/team-worker
       '@deepseek-ai/dsh-terminal':
         specifier: workspace:*
         version: link:../../packages/terminal/terminal
@@ -21613,6 +21798,15 @@ packages:
   lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
+
+  lucide-react@1.61.0:
+    resolution: {integrity: sha512-v2SQPPPNjnr+BlhL9Spuzmo5yR+hLkftfuE4E3jaxdNPgSH0hJKPcLJBP7yAta87jQNPsSERS59PJjCJ/CorBA==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -29185,6 +29379,12 @@ snapshots:
   lru-cache@6.0.0:
     dependencies:
       yallist: 4.0.0
+
+  lucide-react@1.61.0(@types/react@18.3.31)(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+    optionalDependencies:
+      '@types/react': 18.3.31
 
   lz-string@1.5.0: {}
 

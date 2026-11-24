@@ -1,12 +1,4 @@
-/**
- * Elevation stylesheet contract, asserted against the CSS text on disk:
- * gradient-shadow-text.css composes the elevation tokens from a rebindable
- * 0.5px hairline stroke plus soft layers, and no package rule pairs an
- * lv/elevation box-shadow with a neutral-border-token border — elevated
- * surfaces draw their neutral stroke inside the elevation shadow (border: 0),
- * never as a layout-consuming border beside it. State-colored borders (for
- * example the warn approval panels) stay real borders and are out of scope.
- */
+/** Neutral borders and opaque floating surfaces share the theme elevation tokens. */
 import { readFileSync } from 'node:fs'
 import { basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -49,26 +41,26 @@ describe('elevation tokens', () => {
     // --dsw-elevation-stroke-color rebind a no-op. Per-element declarations
     // re-substitute against the color each element sees (the same contract
     // scrollbar.css states for --dsh-scrollbar-thumb).
-    expect(perElement.get('--dsw-elevation-stroke')).toBe(`0 0 0 0.5px var(${STROKE_COLOR})`)
+    expect(perElement.get('--dsw-elevation-stroke')).toBe(`0 0 0 1px var(${STROKE_COLOR})`)
     for (const name of ['--dsw-elevation-panel', '--dsw-elevation-prominent', '--dsw-elevation-soft']) {
-      expect(perElement.get(name), name).toMatch(/^var\(--dsw-elevation-stroke\), 0 /)
+      expect(perElement.get(name), name).toContain('var(--dsw-')
       expect(bodyOnly.has(name), name).toBe(false)
     }
   })
 
-  it('defines the translucent menu material for both palettes', () => {
+  it('defines opaque menu surfaces for both palettes', () => {
     expect(bodyOnly.get('--dsw-mask-blur')).toBe('none')
-    expect(bodyOnly.get('--dsw-menu-backdrop-filter')).toBe('blur(40px) saturate(150%)')
+    expect(bodyOnly.get('--dsw-menu-backdrop-filter')).toBe('none')
     const platformRules = parseRules(platformCss)
     const value = (selector: string, token = '--dsw-menu-surface-fill'): string | undefined => platformRules
       .filter(rule => rule.selectors.includes(selector))
       .flatMap(rule => rule.declarations)
       .findLast(([property]) => property === token)?.[1]
-    expect(value('body')).toBe('rgba(248, 249, 250, 0.58)')
-    expect(value('body[data-ds-dark-theme]')).toBe('rgba(67, 69, 74, 0.45)')
+    expect(value('body')).toBe('#ffffff')
+    expect(value('body[data-ds-dark-theme]')).toBe('#171717')
     expect(value('body', '--dsw-specific-menu')).toBe('var(--dsw-menu-surface-fill)')
-    expect(value("html[data-platform='darwin'] body", '--dsw-specific-menu')).toBe('rgba(248, 249, 250, 0.94)')
-    expect(value("html[data-platform='darwin'] body[data-ds-dark-theme]", '--dsw-specific-menu')).toBe('rgba(48, 49, 54, 0.94)')
+    expect(value("html[data-platform='darwin'] body", '--dsw-specific-menu')).toBe('var(--popover)')
+    expect(value("html[data-platform='darwin'] body[data-ds-dark-theme]", '--dsw-specific-menu')).toBe('var(--popover)')
   })
 })
 
@@ -194,7 +186,7 @@ function wideNeutralBorders(css: string, exempt: Set<string> = new Set()): strin
     for (const [property, value] of rule.declarations) {
       if (!BORDER_EDGE.test(property)) continue
       if (!value.includes('solid') || !NEUTRAL_BORDER.test(value)) continue
-      if (value.startsWith('0.5px ')) continue
+      if (value.startsWith('0.5px ') || value.startsWith('1px ')) continue
       if (rule.selectors.some(selector => exempt.has(selector))) continue
       wide.push(`${rule.selectors.join(', ')} ${property}: ${value}`)
     }
@@ -223,7 +215,7 @@ function wideFilledDividers(css: string): string[] {
   return wide
 }
 
-describe('neutral solid borders are hairlines', () => {
+describe('neutral solid borders stay within the shared stroke', () => {
   /**
    * Spinner ring tracks, keyed `<basename> <selector>`: the border is the
    * drawn graphic (a rotating ring), not an outline, so it keeps its width.
@@ -233,15 +225,15 @@ describe('neutral solid borders are hairlines', () => {
   ])
 
   it('rejects a wide neutral border and a wide filled divider', () => {
-    expect(wideNeutralBorders('.a { border: 1px solid var(--dsw-alias-border-l2); }'))
-      .toEqual(['.a border: 1px solid var(--dsw-alias-border-l2)'])
+    expect(wideNeutralBorders('.a { border: 2px solid var(--dsw-alias-border-l2); }'))
+      .toEqual(['.a border: 2px solid var(--dsw-alias-border-l2)'])
     expect(wideNeutralBorders('.a { border: 0.5px solid var(--dsw-alias-border-l2); }')).toEqual([])
     expect(wideFilledDividers('.a { background: var(--dsw-alias-border-l2); height: 1px; }'))
       .toEqual(['.a height: 1px'])
     expect(wideFilledDividers('.a { background: var(--dsw-alias-border-l2); height: 0.5px; }')).toEqual([])
   })
 
-  it('draws every solid neutral-token border at 0.5px under packages/', () => {
+  it('caps solid neutral-token borders at 1px under packages/', () => {
     // Buttons, inputs, cards, and separators share the hairline weight;
     // dashed affordances and state-colored borders are out of scope.
     const wide = packageStylesheets().flatMap((file) => {

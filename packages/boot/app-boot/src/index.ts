@@ -952,6 +952,8 @@ const requiredStartupEntryIds = new Set<string>([
   'agent-loop',
   'webserver',
   'web-runtime',
+  'team-server',
+  'team-runtime',
   'modules',
   'connection',
   'headless-runner',

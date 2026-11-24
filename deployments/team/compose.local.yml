@@ -1,0 +1,5 @@
+# Docker Desktop development only. Production uses compose.yml with rootless Docker and HTTPS.
+services:
+  gateway:
+    environment:
+      TEAM_LOCAL_DEVELOPMENT: '1'

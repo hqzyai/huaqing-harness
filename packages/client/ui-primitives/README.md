@@ -41,7 +41,7 @@ Check this table before writing a control in a feature package. A plugin cannot 
 | Export | What it is |
 |---|---|
 | `Button` | Clickable action; `variant` selects `primary`, `ghost`, `outline`, or `toolbar`. Its ref targets the native button for focus and overlay anchoring. |
-| `Switch` | Two-state toggle, 36×20. The off-state thumb reads `--dsw-alias-switch-thumb` so it stays light in both themes, and the on-state thumb contrasts with the brand track. Disabled controls use half opacity. `label` is required, so the control cannot ship unnamed. |
+| `Switch` | Two-state toggle, 32×18. The off-state thumb reads `--dsw-alias-switch-thumb` so it stays light in both themes, and the on-state thumb contrasts with the brand track. Disabled controls use half opacity. `label` is required, so the control cannot ship unnamed. |
 | `SegmentedControl` | Tablist of two or more equal-width segments with one sliding indicator, for switching a card or panel between a few modes; the owner holds the selection and `label` names the list. `id` seeds each tab's id (`<id>-<value>`) and the panel it controls (`<id>-<value>-panel`), which the owner renders and points back at the tab with `aria-labelledby`; a segment may be `disabled` with a `title`, and `disabled` on the control locks every segment while the shown panel has work in flight. |
 | `Checkbox` | Labeled native checkbox with controlled state, keyboard interaction, and disabled styling; the caller supplies localized `label` text. |
 | `Input` | Single-line text entry for search boxes and inline forms. Its ref targets the native input for focus and is cleared on unmount. |
@@ -50,7 +50,7 @@ Check this table before writing a control in a feature package. A plugin cannot 
 | `MenuGroup`, `observeStickyMenuGroups` | Localized, accessible groups for custom menus and listboxes, with shared sticky-heading styling and native intersection/size observation; the caller owns the observer's lifetime. |
 | `Pill` | Selectable capsule button for view switchers and filters; takes `active` and `onClick`. |
 | `SegmentedTabs` | Controlled equal-width tabs with a sliding indicator and Left/Right, Home, and End navigation. The caller supplies labels, tab/panel ids, and panel content. |
-| `Tag` | Read-only capsule badge; `tone` selects one of eight palettes. |
+| `Tag` | Read-only badge with 4px corners; `tone` selects one of eight palettes. |
 | `PathLabel` | Single-line file path with subdued directories, a primary filename, and the full path on hover. Fitting paths align left; clipped paths preserve their suffix with a left-edge fade that updates on path and size changes. |
 | `StateDot` | Solid green `done`, amber `warning`, red `error`, and neutral-grey `idle` marks in a 10px slot, plus a tertiary-grey 14px rotating `ongoing` loader whose animations pin to document time zero on mount and on every animation restart, such as a list reorder, so every visible loader rotates in phase. `aria-hidden`, so the render site owns the name. `appearance="step"` shows a filled check for completion and a hollow pending circle. |
 | `ConnectionIndicator` | Inline connection-recovery control across outage, retry, and recovered states. |
@@ -69,7 +69,7 @@ Check this table before writing a control in a feature package. A plugin cannot 
 | `UserTextRun`, `ReferenceChip` | Uninterpreted inline text and business-resolved reference labels or activation buttons. |
 | `CommandText` | Selectable command or argument text; only horizontal overflow adds a named keyboard focus target. |
 | `TerminalBlock`, `ReadBlock`, `DiffBlock`, `SearchBlock`, `WebBlock` | The agent-output card matching each tool-result intent. |
-| `icons/*`, `FishLogo`, `BrandWordmark`, `ReferenceIconRegular`/`ReferenceIconMedium`, `LinkIconRegular`/`LinkIconMedium` | Glyphs and brand marks. The thinking glyph keeps an inset orbit within its 16px view box. Use `LinkIconMedium` for 14px clickable-link categories and known-site marks. |
+| `icons/*`, `FishLogo`, `BrandWordmark`, `ReferenceIconRegular`/`ReferenceIconMedium`, `LinkIconRegular`/`LinkIconMedium` | Glyphs and brand marks. General icons use Lucide React 1.61.0 with a constant 1.75px outline. Regular/Medium names remain compatible aliases; selected feedback and pin icons retain their filled state. `BrandWordmark` renders the original HQZY blue mark without a text wordmark. Known-site marks keep their own artwork. |
 | `PermissionIconReadOnlyRegular`/`Medium`, `PermissionIconWorkspaceWriteRegular`/`Medium`, `PermissionIconFullAccessRegular`/`Medium`, `PermissionIconAutoReviewRegular`/`Medium` | Permission-mode glyphs for read-only, workspace-write, full-access, and auto-review choices. |
 | `PluginArtworkTerminal`/`Loop`/`Subagent`/`Search`/`Default` | Fixed-palette 36×36 plugin artwork; `Terminal` supplies the light-blue prompt in plugin cards and sidebar guide entries. `Default` marks plugins without artwork of their own. Def ids are per-instance, so the same artwork repeats safely on one page. |
 | `GuideArtworkBrowser`/`Files` | Fixed-palette 36×36 browser and folder artwork for sidebar guide entries. |

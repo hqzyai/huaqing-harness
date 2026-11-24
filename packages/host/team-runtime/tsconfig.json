@@ -1,0 +1,36 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../../../vendor/cordis"
+    },
+    {
+      "path": "../../client/connection/tsconfig.host.json"
+    },
+    {
+      "path": "../webserver"
+    },
+    {
+      "path": "../../util/home-paths"
+    },
+    {
+      "path": "../../util/launch-environment"
+    },
+    {
+      "path": "../../llm/llm-pi-ai"
+    },
+    {
+      "path": "../../llm/team-models"
+    },
+    {
+      "path": "../../../vendor/schemastery"
+    }
+  ]
+}

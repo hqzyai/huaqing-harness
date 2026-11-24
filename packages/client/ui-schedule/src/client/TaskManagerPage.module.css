@@ -90,7 +90,7 @@
 /* The Plugins toolbar's Add-plugin step: a 32px capsule with the 13px label. */
 .newButton {
   height: 32px;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   padding: 0 12px;
   border-radius: 16px;
@@ -152,7 +152,7 @@
   height: 36px;
   margin: 0 0 16px;
   padding: 0 10px;
-  border: 0.5px solid var(--dsw-alias-border-l3);
+  border: 1px solid var(--dsw-alias-border-l3);
   border-radius: 12px;
   color: var(--dsw-alias-label-tertiary);
   transition: border-color 0.15s;
@@ -282,14 +282,14 @@
   display: block;
   margin-top: 2px;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 21px;
   overflow-wrap: anywhere;
 }
 
 .metadata {
   color: inherit;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 21px;
   overflow-wrap: anywhere;
 }
@@ -404,7 +404,7 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  border-left: 0.5px solid var(--dsw-alias-border-l4);
+  border-left: 1px solid var(--dsw-alias-border-l4);
   background: var(--dsw-alias-bg-base);
 }
 
@@ -515,7 +515,7 @@
   min-height: 20px;
   margin-bottom: 20px;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
 }
 
@@ -553,7 +553,7 @@
   height: 44px;
   min-height: 44px;
   padding: 0 var(--detail-gutter);
-  border-bottom: 0.5px solid var(--dsw-alias-border-l3);
+  border-bottom: 1px solid var(--dsw-alias-border-l3);
 }
 
 .detailTabs {
@@ -602,7 +602,7 @@
   padding: 0 0 13px;
   border: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 16px;
   font-weight: 500;
   color: var(--dsw-alias-label-tertiary);
@@ -728,7 +728,7 @@
 .ruleCard h3 {
   margin: 0 0 8px 10px;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   font-weight: 400;
 }
@@ -737,7 +737,7 @@
   display: flex;
   flex-direction: column;
   padding: 0 12px;
-  border: 0.5px solid var(--dsw-alias-border-l3);
+  border: 1px solid var(--dsw-alias-border-l3);
   border-radius: 16px;
 }
 
@@ -765,7 +765,7 @@
 .ruleRowMenu {
   display: flex;
   width: 100%;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l3);
+  border-bottom: 1px solid var(--dsw-alias-border-l3);
 }
 
 .ruleRow {
@@ -875,13 +875,13 @@
   box-sizing: border-box;
   width: 100%;
   padding: 6px 8px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--dsw-alias-border-l2);
   border-radius: 7px;
   outline: none;
   background: var(--dsw-alias-bg-base);
   color: var(--dsw-alias-label-primary);
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
 }
 
@@ -1062,7 +1062,7 @@
 .ruleHint {
   margin: 8px 0 0 10px;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
@@ -1090,7 +1090,7 @@
   field-sizing: content;
   margin: 0;
   padding: 12px;
-  border: 0.5px solid var(--dsw-alias-border-l3);
+  border: 1px solid var(--dsw-alias-border-l3);
   border-radius: 16px;
   outline: 0;
   background: var(--dsw-alias-bg-base);
@@ -1222,7 +1222,7 @@
   overflow: hidden;
   margin: 6px 0 0;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 22px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -1302,13 +1302,13 @@
   justify-content: flex-end;
   gap: 8px;
   padding: 20px var(--detail-gutter);
-  border-top: 0.5px solid var(--dsw-alias-border-l4);
+  border-top: 1px solid var(--dsw-alias-border-l4);
   background: var(--dsw-alias-bg-base);
 }
 
 .saveFooter > button {
   height: 32px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .saveFooter > :last-child {
@@ -1369,7 +1369,7 @@
 .linkedSessionLabel {
   flex-shrink: 0;
   color: var(--dsw-alias-label-secondary);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .linkedSessionTarget {

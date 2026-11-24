@@ -9,17 +9,16 @@ describe('offline brand font', () => {
     expect(fontPath).toBeDefined()
     const font = readFileSync(new URL(`../src/styles/${fontPath!}`, import.meta.url))
     expect(font.readUInt32BE(0)).toBe(0x774f4632)
-    expect(css).toContain('font-weight: 400')
-    expect(css).toContain('font-weight: 300')
-    const light = readFileSync(new URL('../src/styles/montserrat-light.woff2', import.meta.url))
-    expect(light.readUInt32BE(0)).toBe(0x774f4632)
-    expect(css).toContain('font-weight: 500')
-    const medium = readFileSync(new URL('../src/styles/montserrat-medium.woff2', import.meta.url))
-    expect(medium.readUInt32BE(0)).toBe(0x774f4632)
-    expect(css).toContain('font-style: normal')
+    expect(css).toContain("font-family: 'Geist'")
+    expect(css).toContain("font-family: 'Geist Mono'")
+    expect(css).toContain("font-family: 'Noto Sans SC'")
+    expect(css).toContain('font-weight: 100 900')
+    expect(css).toContain('unicode-range:')
     expect(css).not.toMatch(/url\(https?:/)
-    const license = readFileSync(new URL('../src/styles/Montserrat-OFL.txt', import.meta.url), 'utf8')
-    expect(license).toContain('SIL OPEN FONT LICENSE Version 1.1')
+    for (const family of ['geist', 'geist-mono', 'noto-sans-sc']) {
+      const license = readFileSync(new URL(`../src/styles/fonts/${family}-OFL.txt`, import.meta.url), 'utf8')
+      expect(license).toContain('SIL OPEN FONT LICENSE')
+    }
     const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
       files: string[]
       exports: Record<string, unknown>

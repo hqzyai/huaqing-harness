@@ -22,7 +22,8 @@ async function paint(target: Locator) {
       active: document.activeElement === element,
       focusVisible: element.matches(':focus-visible'),
       modality: document.documentElement.getAttribute('data-input-modality'),
-      focusColor: resolveColor(style.getPropertyValue('--dsw-alias-state-business-primary').trim()),
+      focusColor: resolveColor(style.getPropertyValue('--ring').trim()),
+      businessColor: resolveColor(style.getPropertyValue('--dsw-alias-state-business-primary').trim()),
       hover: resolveColor(style.getPropertyValue('--dsw-alias-interactive-bg-hover').trim()),
       outline: style.outlineColor,
       outlineStyle: style.outlineStyle,
@@ -104,7 +105,7 @@ it.each(['light', 'dark'] as const)('assembled app (%s): pointer keys stay silen
   await connectFreshWorkspace(page, scaffold.workspaceCwd)
   await expect.poll(() => page.locator('body').getAttribute('data-ds-dark-theme')).toBe(theme === 'dark' ? '' : null)
   const trigger = page.getByRole('button', { name: /^Access mode, current:/ })
-  expect((await paint(trigger)).focusColor).toBe(theme === 'dark' ? 'rgb(122, 170, 255)' : 'rgb(65, 118, 230)')
+  expect((await paint(trigger)).focusColor).toBe(theme === 'dark' ? 'rgb(163, 163, 163)' : 'rgb(82, 82, 82)')
 
   await trigger.click()
   await page.getByRole('menu').waitFor()
@@ -430,7 +431,7 @@ describe('source-compiled supplementary focus paint', () => {
     expect((await paint(member)).active).toBe(true)
     const descendant = await paint(member.locator('[data-member-ring]'))
     expect(descendant.outlineStyle).toBe('solid')
-    expect(descendant.outline).toBe(descendant.focusColor)
+    expect(descendant.outline).toBe(descendant.businessColor)
   })
 
   it('silences high-specificity table rings without hiding selected-state shadows', async () => {
@@ -505,7 +506,7 @@ describe('source-compiled supplementary focus paint', () => {
     const light = await ringReport(button)
     expect(light.style).not.toBe('none')
     expect(light.width).toBe('2px')
-    expect(light.color).toBe('rgb(65, 118, 230)')
+    expect(light.color).toBe('rgb(82, 82, 82)')
     expect(light.contrast).not.toBeNull()
     expect(light.contrast!).toBeGreaterThanOrEqual(3)
 
@@ -514,7 +515,7 @@ describe('source-compiled supplementary focus paint', () => {
     await button.focus()
     const dark = await ringReport(button)
     expect(dark.width).toBe('2px')
-    expect(dark.color).toBe('rgb(122, 170, 255)')
+    expect(dark.color).toBe('rgb(163, 163, 163)')
     expect(dark.contrast).not.toBeNull()
     expect(dark.contrast!).toBeGreaterThanOrEqual(3)
 

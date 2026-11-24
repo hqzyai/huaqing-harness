@@ -126,7 +126,7 @@ describe('SidebarRoot shell', () => {
   it('routes New Session (capsule + wordmark) and the column toggle', () => {
     const b = mountShell()
     expect(screen.getByTestId('custom-brand-mark')).toBeTruthy()
-    expect(screen.getByTestId('custom-brand-name')).toBeTruthy()
+    expect(screen.queryByTestId('custom-brand-name')).toBeNull()
     // Expanded, both the wordmark and the capsule start a session.
     const starters = screen.getAllByRole('button', { name: 'New session' })
     expect(starters).toHaveLength(2)
@@ -151,8 +151,8 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
-    expect(screen.getByText('1.2.3-rc.4-0123456-dirty')).toBeTruthy()
+    expect(screen.queryByText('Huaqing Harness')).toBeNull()
+    expect(screen.getByAltText('HQZY')).toBeTruthy()
     expect(container.querySelector('svg')).not.toBeNull()
   })
 
@@ -172,8 +172,9 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
-    expect(screen.getByText(expected)).toBeTruthy()
+    expect(screen.queryByText('Huaqing Harness')).toBeNull()
+    expect(screen.queryByText(expected)).toBeNull()
+    expect(screen.getByAltText('HQZY')).toBeTruthy()
   })
 
   it('retains the local-build fallback without complete build metadata', () => {
@@ -188,7 +189,7 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
+    expect(screen.queryByText('Huaqing Harness')).toBeNull()
   })
 
   it('hands the region its wide flag and clamps expandSidebar to the collapsed state', () => {

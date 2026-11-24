@@ -1,0 +1,46 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/bundle/team-worker/README.md
+/:
+  en: 86f7bccd81a5207d
+  zh: 91a69d6ae5fcd34c
+/deepseek-ai-dsh-team-worker:
+  en: 951ea20cd937ed34
+  zh: 10a47f2c6d45d697
+/deepseek-ai-dsh-team-worker/summary:
+  en: 1f19cf71fdadd8d9
+  zh: 416eb84f39dcc5c4
+/deepseek-ai-dsh-team-worker/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 0cd57b7b8d8c9b59
+/deepseek-ai-dsh-team-worker/use-this-package:
+  en: 380f1473d9ce9068
+  zh: f19207afc0922e1a
+/deepseek-ai-dsh-team-worker/understand-the-implementation:
+  en: df3b44d9bd8e956c
+  zh: a53e3f00b7a57f89
+/deepseek-ai-dsh-team-worker/further-exploration:
+  en: 0bcffcfa6b5f71d6
+  zh: fb6e4a57aac9f2c0
+/deepseek-ai-dsh-team-worker/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-team-worker/model-experience/worker-model-selection:
+  en: c0842ace1d490cc2
+  zh: 2c9636b9ce9cf712
+/deepseek-ai-dsh-team-worker/model-experience/worker-model-selection/what-the-model-sees:
+  en: 645bab38ac5e1f4d
+  zh: ba4d4e95e13c9139
+/deepseek-ai-dsh-team-worker/model-experience/worker-model-selection/token-effect:
+  en: 72add8181d831007
+  zh: 21e3f54c937039ef
+/deepseek-ai-dsh-team-worker/model-experience/worker-model-selection/kv-cache-effect:
+  en: 4aeb0944011faf65
+  zh: 43aa7c14822bef5e
+/deepseek-ai-dsh-team-worker/known-limitations-and-deferred-work:
+  en: 962cd0a0b2af1cbb
+  zh: 7f346a37eb1c5350
+/deepseek-ai-dsh-team-worker/known-limitations-and-deferred-work/dev-note:
+  en: e67f633dc6fe7773
+  zh: e158493cbe7c759c

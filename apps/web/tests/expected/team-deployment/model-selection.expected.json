@@ -1,0 +1,4 @@
+{
+  "selection": { "provider": "team-fixture", "model": "fixture-two" },
+  "request": { "provider": "team-fixture", "model": "fixture-two" }
+}

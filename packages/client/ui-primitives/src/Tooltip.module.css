@@ -8,13 +8,13 @@
      viewport edge, so anchors near the right edge would wrap early;
      max-content sizes by the label alone, capped at half the viewport. */
   width: max-content;
-  max-width: 50vw;
-  padding: 3px 7px;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 6px 8px;
   border-radius: var(--dsw-radius-sm);
   background: var(--dsw-alias-tooltip-bg);
-  color: var(--dsw-static-neutral-bluish-00);
-  font-size: 13px;
-  line-height: 20px;
+  color: var(--popover-foreground);
+  font-size: 12px;
+  line-height: 18px;
   white-space: pre-line;
   /* Unbreakable tokens (URLs, paths) must not push past max-width. */
   overflow-wrap: break-word;

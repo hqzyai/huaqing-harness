@@ -16,7 +16,7 @@
 
 .intro {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--dsw-alias-label-tertiary);
 }
 
@@ -24,7 +24,7 @@
   display: flex;
   align-items: flex-end;
   gap: 22px;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l2);
+  border-bottom: 1px solid var(--dsw-alias-border-l2);
   margin-top: 2px;
 }
 
@@ -35,7 +35,7 @@
   background: transparent;
   color: var(--dsw-alias-label-tertiary);
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   cursor: pointer;
 }
@@ -80,7 +80,7 @@
 
 .empty {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--dsw-alias-label-tertiary);
 }
 
@@ -102,7 +102,7 @@
 
 .presetSettingsTitle {
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 22px;
   font-weight: 600;
 }

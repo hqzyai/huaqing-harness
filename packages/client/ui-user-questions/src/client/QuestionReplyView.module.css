@@ -99,7 +99,7 @@
 .detail,
 .options {
   color: var(--dsw-alias-label-secondary);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .questionText {
@@ -136,7 +136,7 @@
 
 .time {
   padding-right: 4px;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 24px;
   white-space: nowrap;
 }

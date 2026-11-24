@@ -1,5 +1,5 @@
 ---
-description: "Model context for users and maintainers of the Web GUI that names the DeepSeek Harness checkout and GUI URL without letting either change the system prompt."
+description: "Model context for users and maintainers of the Web GUI that names the Huaqing Harness checkout and GUI URL without letting either change the system prompt."
 kind: "package-reference"
 ---
 
@@ -9,7 +9,7 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-harness-dev-context` tells an agent running behind the DeepSeek Harness Web GUI where the harness implementation checkout lives, how the GUI relates to "this page", and which URL serves it. The system prompt carries only value-free guidance; the current checkout path and GUI URL arrive as runtime context, so starting the process from another checkout, port, or installation never rewrites a Session's logged system prompt. Sessions whose prompt still embeds those values from earlier releases keep that text verbatim.
+`dsh-harness-dev-context` tells an agent running behind the Huaqing Harness Web GUI where the harness implementation checkout lives, how the GUI relates to "this page", and which URL serves it. The system prompt carries only value-free guidance; the current checkout path and GUI URL arrive as runtime context, so starting the process from another checkout, port, or installation never rewrites a Session's logged system prompt. Sessions whose prompt still embeds those values from earlier releases retain their earlier path and URL while rendering the current product name.
 
 ## Table of Contents
 
@@ -33,7 +33,7 @@ Two system-prompt sections explain that the checkout differs from the working di
 
 ### Sessions from earlier releases
 
-Earlier releases embedded both values in the system prompt. When a Session's latest nonempty system prompt still contains those exact paragraphs, the sections repeat them verbatim, old values included, so upgrading and later port or checkout changes leave that Session's prompt byte-identical; the runtime-context lines still give the current values. Text that only resembles an earlier paragraph receives the current guidance.
+Earlier releases embedded both values in the system prompt. When a Session's latest nonempty system prompt contains those exact paragraphs, the sections retain the old path and URL and use the current product name. The agent loop records the changed system prompt without editing historical events. Later port or checkout changes leave that rendering unchanged; runtime-context lines give the current values. Text that only resembles an earlier paragraph receives the current guidance.
 
 -----
 
@@ -47,7 +47,7 @@ This section explains the design of the plugin; the observable behavior is cover
 
 ### Design concept
 
-A host-only session projection, `harnessDevLegacyPrompt`, folds every committed nonempty `system/message` into the earlier-format paragraphs it contains, matched by their fixed text around the value on one line. The section text providers read that state through `AssembleContext.agent`; assemblies without an agent use the current guidance. The projection is restored with every other unit when a Session resumes, so no historical event is read synchronously.
+A host-only session projection, `harnessDevLegacyPrompt`, folds every committed nonempty `system/message` into the earlier-format paragraphs it contains, matched by their fixed text around the value on one line under either the earlier or current product name. Only the fixed product-name prefix is normalized; paths and URLs remain literal. The section text providers read that state through `AssembleContext.agent`; assemblies without an agent use the current guidance. The projection is restored with every other unit when a Session resumes, so no historical event is read synchronously. State version 2 invalidates earlier cached paragraphs and refolds the stored events with the current product name.
 
 ### Source map
 
@@ -82,22 +82,22 @@ Read these pages when the package-level contract is not enough. They move from t
 
 #### What the model sees
 
-Two system-prompt paragraphs at first-party orders 10000 and 10100, after reusable instructions, and two runtime-context lines at context orders 200 and 210. A Session admitted under an earlier release sees its own earlier paragraphs instead of the two below.
+Two system-prompt paragraphs at first-party orders 10000 and 10100, after reusable instructions, and two runtime-context lines at context orders 200 and 210. A Session admitted under an earlier release sees its earlier value-bearing paragraphs with the current product name instead of the two below.
 
 ##### System-prompt paragraphs
 
 ```markdown
-The runtime context names the DeepSeek Harness implementation checkout. The checkout location and current working directory are separate values and may differ; never infer the working directory from the checkout path. Use pwd to determine the current working directory. Use this checkout only to inspect or extend DSH itself.
+The runtime context names the Huaqing Harness implementation checkout. The checkout location and current working directory are separate values and may differ; never infer the working directory from the checkout path. Use pwd to determine the current working directory. Use this checkout only to inspect or extend DSH itself.
 
-You are interacting with the user through the DeepSeek Harness Web GUI whose URL the runtime context names. When the user refers to "this page", "this GUI", or "this app" without naming another target, they mean this GUI. The browser provides no implicit DOM, route, or screenshot context. The client-plugin HMR receiver is active, but client-plugin changes reload without a refresh only while `pnpm run dev:web` is also running from this same checkout to rebuild their bundles; verify that watcher before promising automatic updates. Every other change — the apps/web shell and plain packages — requires rebuilding the affected Web artifacts and verifying this existing URL after a page refresh. Starting another server does not update this GUI. The apps/web Vite entry builds the shell but is not a standalone application because only dsh web injects window.__DSH_BOOT__. Do not start a replacement server unless the user asks; if one is needed, use a managed background job and verify its exact URL.
+You are interacting with the user through the Huaqing Harness Web GUI whose URL the runtime context names. When the user refers to "this page", "this GUI", or "this app" without naming another target, they mean this GUI. The browser provides no implicit DOM, route, or screenshot context. The client-plugin HMR receiver is active, but client-plugin changes reload without a refresh only while `pnpm run dev:web` is also running from this same checkout to rebuild their bundles; verify that watcher before promising automatic updates. Every other change — the apps/web shell and plain packages — requires rebuilding the affected Web artifacts and verifying this existing URL after a page refresh. Starting another server does not update this GUI. The apps/web Vite entry builds the shell but is not a standalone application because only dsh web injects window.__DSH_BOOT__. Do not start a replacement server unless the user asks; if one is needed, use a managed background job and verify its exact URL.
 ```
 
 ##### Runtime-context lines
 
 ```markdown
-Current DeepSeek Harness implementation checkout: "<installation root>".
+Current Huaqing Harness implementation checkout: "<installation root>".
 
-Current DeepSeek Harness Web GUI URL: "<advertised URL>".
+Current Huaqing Harness Web GUI URL: "<advertised URL>".
 ```
 
 #### Token effect
@@ -119,7 +119,7 @@ These limits describe what the stability guarantee covers. They are current pack
 - **Mixed releases** — a release without this package rewrites the first system message of a Session started with it, so every checkout that serves a shared `DSH_HOME` needs this package before they alternate.
 - **Optional values** — the two runtime-context lines are optional, so a custom persona that sets `includeRuntimeContext: false` without `complete: true` keeps the sections that point at values its requests never carry. The shipped `minimal` persona sets both.
 - **Sessions without the sections** — a Session created while `surfaceContext: false` hid both paragraphs has neither in its log, so the first resumed request adds the new sections and rewrites the first system message on routes without in-history prompt updates.
-- **One earlier wording** — the projection recognizes the paragraphs as the release immediately before this package rendered them; a Session holding an older wording gets the current guidance.
+- **One earlier wording** — the projection recognizes the fixed value-bearing paragraphs under the earlier and current product names; a Session holding an older wording gets the current guidance.
 
 <a id="dev-note"></a>
 ### Dev Note

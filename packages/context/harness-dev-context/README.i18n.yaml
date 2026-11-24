@@ -3,14 +3,14 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write packages/context/harness-dev-context/README.md
 /:
-  en: 8fed567b18e9dfa2
-  zh: 2ab54db218cc0197
+  en: 5a70a732a3501d64
+  zh: 32ec84dbd2f1f539
 /deepseek-ai-dsh-harness-dev-context:
   en: b47701c093269adb
   zh: e147a06ec0d6047f
 /deepseek-ai-dsh-harness-dev-context/summary:
-  en: daf618174270461e
-  zh: 4c5b56fe4380c91f
+  en: be1bd8a123fa15e9
+  zh: 031be36e1bbe10bc
 /deepseek-ai-dsh-harness-dev-context/table-of-contents:
   en: d152484eb41ac6b4
   zh: 09388d293f9be9cb
@@ -21,14 +21,14 @@
   en: d9f5b11af33b3eb8
   zh: fc96b972503a0b99
 /deepseek-ai-dsh-harness-dev-context/use-this-package/sessions-from-earlier-releases:
-  en: d810950db5118265
-  zh: d20e3965fa78e0f8
+  en: 6a680601de2ad30a
+  zh: ba35b590292f9db7
 /deepseek-ai-dsh-harness-dev-context/understand-the-implementation:
   en: 2d21fa2aad5a729d
   zh: cfbfada0eb647435
 /deepseek-ai-dsh-harness-dev-context/understand-the-implementation/design-concept:
-  en: 401a852a3444aff4
-  zh: 5288a593f61c168b
+  en: 02c856eb09dc5326
+  zh: 853a759529127e82
 /deepseek-ai-dsh-harness-dev-context/understand-the-implementation/source-map:
   en: 4696b6c3a1f91f96
   zh: 3a56d257ec768a5e
@@ -45,8 +45,8 @@
   en: ddbe5927f55a6275
   zh: 1687795c41c16a8c
 /deepseek-ai-dsh-harness-dev-context/model-experience/harness-checkout-and-web-gui/what-the-model-sees:
-  en: f3236c45cf5bc3a6
-  zh: 1a3499b2e21f4761
+  en: 7b3dded59d2cd828
+  zh: 30292afe986276d5
 /deepseek-ai-dsh-harness-dev-context/model-experience/harness-checkout-and-web-gui/what-the-model-sees/system-prompt-paragraphs:
   en: c6c9fa4caf6f2f30
   zh: f501149c17c0ea60
@@ -60,8 +60,8 @@
   en: e8f89a14bd36dae0
   zh: bd4ec43e07e234c9
 /deepseek-ai-dsh-harness-dev-context/known-limitations-and-deferred-work:
-  en: 558945e2f537db5b
-  zh: f584fcde6275c2da
+  en: 31bd73b50ff1ffa0
+  zh: 75644dc26e99ac40
 /deepseek-ai-dsh-harness-dev-context/known-limitations-and-deferred-work/dev-note:
   en: e67f633dc6fe7773
   zh: e88aeb617ffb74ea

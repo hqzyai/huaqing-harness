@@ -8,11 +8,11 @@ import {
   createUserMessage, LlmAdapter,
   type GenerateOptions, type LlmResolvedModelInfo, type StreamChunk, type SystemPromptUpdate,
 } from '@deepseek-ai/dsh-llm'
-import { SessionId, type Session } from '@deepseek-ai/dsh-session'
+import { SessionId, SessionLogOffset, type Session } from '@deepseek-ai/dsh-session'
 import { renderContextSnapshot, renderPrompt } from '@deepseek-ai/dsh-system-prompt'
 import * as HarnessDevContext from '../src/index.ts'
 
-const SOURCE_PROMPT = 'The runtime context names the DeepSeek Harness implementation checkout. The checkout location and current working directory are separate values and may differ; never infer the working directory from the checkout path. Use pwd to determine the current working directory. Use this checkout only to inspect or extend DSH itself.'
+const SOURCE_PROMPT = 'The runtime context names the Huaqing Harness implementation checkout. The checkout location and current working directory are separate values and may differ; never infer the working directory from the checkout path. Use pwd to determine the current working directory. Use this checkout only to inspect or extend DSH itself.'
 const WEB_GUIDANCE = 'When the user refers to "this page", "this GUI", or "this app" without naming another target, they mean this GUI. '
   + 'The browser provides no implicit DOM, route, or screenshot context. '
   + 'The client-plugin HMR receiver is active, but client-plugin changes reload without a refresh only while '
@@ -21,7 +21,7 @@ const WEB_GUIDANCE = 'When the user refers to "this page", "this GUI", or "this 
   + 'Starting another server does not update this GUI. '
   + 'The apps/web Vite entry builds the shell but is not a standalone application because only dsh web injects window.__DSH_BOOT__. '
   + 'Do not start a replacement server unless the user asks; if one is needed, use a managed background job and verify its exact URL.'
-const WEB_PROMPT = `You are interacting with the user through the DeepSeek Harness Web GUI whose URL the runtime context names. ${WEB_GUIDANCE}`
+const WEB_PROMPT = `You are interacting with the user through the Huaqing Harness Web GUI whose URL the runtime context names. ${WEB_GUIDANCE}`
 
 /** The value-bearing paragraphs earlier releases rendered. */
 const LEGACY_SOURCE = 'The DeepSeek Harness implementation checkout is at /old/checkout/. The checkout location and current working directory are separate values and may differ; never infer the working directory from this path. Use pwd to determine the current working directory. Use this checkout only to inspect or extend DSH itself.'
@@ -130,6 +130,27 @@ function requestSystemPrompts(request: GenerateOptions | undefined): string[] {
 }
 
 describe('harness-dev-context', () => {
+  it('refolds an earlier persisted host-only checkpoint under the current product name', async () => {
+    const h = await promptLoop(undefined)
+    const agent = await h.earlierSession()
+    const checkpoint = h.ctx.sessionProjections.checkpoint(agent.session)
+    const earlier = checkpoint.harnessDevLegacyPrompt
+    expect(earlier).toBeDefined()
+    const restored = h.ctx.sessionProjections.restore({
+      ...checkpoint,
+      harnessDevLegacyPrompt: {
+        ...earlier!, ver: 1, val: { source: LEGACY_SOURCE, web: LEGACY_WEB },
+      },
+    }, agent.session.snapshotEvents(), SessionLogOffset(0), agent.session.header, agent.session.inheritedEventCount)
+    expect(restored.checkpoint.harnessDevLegacyPrompt).toMatchObject({
+      ver: 2,
+      val: {
+        source: LEGACY_SOURCE.replace('DeepSeek Harness', 'Huaqing Harness'),
+        web: LEGACY_WEB.replace('DeepSeek Harness', 'Huaqing Harness'),
+      },
+    })
+  })
+
   it('registers value-free sections and reports the checkout and Web GUI URL as runtime context', async () => {
     const ctx = new Context()
     onTestFinished(() => ctx.fiber.dispose())
@@ -142,8 +163,8 @@ describe('harness-dev-context', () => {
       .map(entry => entry.text)).toEqual([SOURCE_PROMPT, WEB_PROMPT])
     expect(renderPrompt(assembly)).not.toContain('127.0.0.1')
     expect(renderContextSnapshot(assembly).split('\n\n').slice(1)).toEqual([
-      expect.stringMatching(/^Current DeepSeek Harness implementation checkout: ".+"\.$/u),
-      'Current DeepSeek Harness Web GUI URL: "http://127.0.0.1:4567".',
+      expect.stringMatching(/^Current Huaqing Harness implementation checkout: ".+"\.$/u),
+      'Current Huaqing Harness Web GUI URL: "http://127.0.0.1:4567".',
     ])
 
     await fiber.dispose()
@@ -155,7 +176,7 @@ describe('harness-dev-context', () => {
   it.each([
     { route: 'replace-only', systemPromptUpdate: undefined },
     { route: 'in-history', systemPromptUpdate: 'in-history' as const },
-  ])('resumes an earlier-format Session on other ports without rewriting its system prompt ($route)', async ({ systemPromptUpdate }) => {
+  ])('updates the product name once while retaining earlier paths across resumed ports ($route)', async ({ systemPromptUpdate }) => {
     const h = await promptLoop(systemPromptUpdate)
     const original = await h.earlierSession()
     const logged = systemPrompts(original.session)
@@ -164,15 +185,23 @@ describe('harness-dev-context', () => {
     expect(logged[0]).toContain(LEGACY_WEB)
 
     let session = original.session
+    let branded: string[] | undefined
     for (const port of [4568, 4569]) {
       h.listener.port = port
       const resumed = await h.resume(session, `earlier-on-${String(port)}`)
       await send(resumed, `after the upgrade on ${String(port)}`)
-      expect(systemPrompts(resumed.session)).toEqual(logged)
-      expect(requestSystemPrompts(h.adapter.requests.at(-1))).toEqual(logged)
+      const prompts = systemPrompts(resumed.session)
+      expect(prompts.at(-1)).toContain(LEGACY_SOURCE.replace('DeepSeek Harness', 'Huaqing Harness'))
+      expect(prompts.at(-1)).toContain(LEGACY_WEB.replace('DeepSeek Harness', 'Huaqing Harness'))
+      expect(prompts.at(-1)).not.toContain('DeepSeek Harness')
+      expect(prompts[0]).toBe(logged[0])
+      if (branded === undefined) branded = prompts
+      else expect(prompts).toEqual(branded)
+      expect(requestSystemPrompts(h.adapter.requests.at(-1))).toEqual(systemPromptUpdate === 'in-history'
+        ? branded : [branded.at(-1)])
       expect(latestRuntimeContext(resumed.session))
-        .toContain(`Current DeepSeek Harness Web GUI URL: "http://127.0.0.1:${String(port)}".`)
-      expect(latestRuntimeContext(resumed.session)).toContain('Current DeepSeek Harness implementation checkout: "')
+        .toContain(`Current Huaqing Harness Web GUI URL: "http://127.0.0.1:${String(port)}".`)
+      expect(latestRuntimeContext(resumed.session)).toContain('Current Huaqing Harness implementation checkout: "')
       session = resumed.session
     }
   })
@@ -180,20 +209,20 @@ describe('harness-dev-context', () => {
   it('keeps earlier paragraphs after a series consolidation empties a later prompt version', async () => {
     const h = await promptLoop('in-history')
     const resumed = await h.resume((await h.earlierSession()).session, 'earlier-consolidated')
-    const [earlier] = systemPrompts(resumed.session)
+    await send(resumed, 'use the current product name')
+    const earlier = systemPrompts(resumed.session).at(-1)
     const update = h.ctx.systemPrompt.section({ name: 'test:update', order: 0, text: 'Updated instruction.' })
     await send(resumed, 'append the update')
-    expect(systemPrompts(resumed.session)).toHaveLength(2)
+    expect(systemPrompts(resumed.session).at(-1)).toContain('Updated instruction.')
     update()
     h.ctx.on('agent/pre-step', async (_payload, next) => {
       const decision = await next()
       return decision.kind === 'enter' ? { ...decision, startsRequestSeries: true } : decision
     })
-    // The head already matches, so consolidation logs only the emptied later version.
     await send(resumed, 'start a new series')
-    expect(systemPrompts(resumed.session)).toEqual([earlier, expect.stringContaining('Updated instruction.'), ''])
+    const consolidated = systemPrompts(resumed.session)
     await send(resumed, 'continue the series')
-    expect(systemPrompts(resumed.session)).toHaveLength(3)
+    expect(systemPrompts(resumed.session)).toEqual(consolidated)
     expect(requestSystemPrompts(h.adapter.requests.at(-1))).toEqual([earlier])
   })
 
@@ -219,12 +248,12 @@ describe('harness-dev-context', () => {
     expect(logged[0]).toContain(SOURCE_PROMPT)
     expect(logged[0]).toContain(WEB_PROMPT)
     expect(logged[0]).not.toContain('127.0.0.1')
-    expect(latestRuntimeContext(agent.session)).toContain('Current DeepSeek Harness Web GUI URL: "http://127.0.0.1:4567".')
+    expect(latestRuntimeContext(agent.session)).toContain('Current Huaqing Harness Web GUI URL: "http://127.0.0.1:4567".')
 
     h.listener.port = 4568
     const resumed = await h.resume(agent.session, 'fresh-on-4568')
     await send(resumed, 'second')
     expect(systemPrompts(resumed.session)).toEqual(logged)
-    expect(latestRuntimeContext(resumed.session)).toContain('Current DeepSeek Harness Web GUI URL: "http://127.0.0.1:4568".')
+    expect(latestRuntimeContext(resumed.session)).toContain('Current Huaqing Harness Web GUI URL: "http://127.0.0.1:4568".')
   })
 })

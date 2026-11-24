@@ -17,7 +17,8 @@
 - [`dsh headless`](#dsh-headless)
 - [`dsh sdk`](#dsh-sdk)
 - [`dsh sdk-minimal`](#dsh-sdk-minimal)
-- [`dsh web`](#dsh-web)
+- [`dsh team`](#dsh-team)
+- [`dsh team-worker`](#dsh-team-worker)
 
 <a id="dsh"></a>
 ## `dsh`
@@ -28,7 +29,7 @@
 Usage: dsh [--profile] <name> [options] [app-args...]
        dsh plugin --profile <name> <pnpm-args...>
 
-dsh: boot a DeepSeek Harness profile — an ordered stack of plugin-bundle patch
+dsh: boot a Huaqing Harness profile — an ordered stack of plugin-bundle patch
 layers under your own overrides.
 
 Arguments:
@@ -136,7 +137,7 @@ Examples:
 ```text
 Usage: dsh --profile sdk [options]
 
-Serve DeepSeek Harness SDK clients over stdio JSON-RPC.
+Serve Huaqing Harness SDK clients over stdio JSON-RPC.
 
 Options:
   -h, --help  show this help
@@ -154,7 +155,7 @@ Example:
 ```text
 Usage: dsh --profile sdk-minimal [options]
 
-Serve DeepSeek Harness SDK clients over stdio JSON-RPC.
+Serve Huaqing Harness SDK clients over stdio JSON-RPC.
 
 Options:
   -h, --help  show this help
@@ -164,15 +165,30 @@ Example:
 
 ```
 
-<a id="dsh-web"></a>
-## `dsh web`
+<a id="dsh-team"></a>
+## `dsh team`
 
-调用方式: `dsh web --help`, `dsh --profile web --help`
+调用方式: `dsh team --help`, `dsh --profile team --help`
+
+```text
+Usage: dsh team [options]
+
+Start the Huaqing team service. Configure TEAM_* deployment values before
+launch.
+
+Options:
+  -h, --help  display help for command
+```
+
+<a id="dsh-team-worker"></a>
+## `dsh team-worker`
+
+调用方式: `dsh team-worker --help`, `dsh --profile team-worker --help`, `dsh web --help`, `dsh --profile web --help`
 
 ```text
 Usage: dsh --profile web [options]
 
-Serve the DeepSeek Harness browser UI.
+Serve the Huaqing Harness browser UI.
 
 Options:
   --host <host>                  bind address: one concrete IPv4 or IPv6 literal

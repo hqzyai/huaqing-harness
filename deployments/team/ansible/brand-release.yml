@@ -1,0 +1,52 @@
+- name: Publish only the reviewed Harness branding images
+  hosts: workstations
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: Require one workstation, immutable images and an explicit release action
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - brand_release_action | default('plan') in ['plan', 'apply', 'verify', 'rollback']
+          - brand_release_action | default('plan') == 'plan' or brand_release_confirm | default(false) | bool
+          - brand_release_action | default('plan') != 'plan' or brand_gateway_image | default('') is match('^sha256:[0-9a-f]{64}$')
+          - brand_release_action | default('plan') != 'plan' or brand_worker_image | default('') is match('^sha256:[0-9a-f]{64}$')
+    - name: Install the bounded release helper
+      ansible.builtin.copy:
+        src: brand-release.py
+        dest: /home/ubuntu/Workspace/.ansible-ops/harness-brand-release.py
+        mode: '0700'
+    - name: Install the read-only worker activity probe
+      ansible.builtin.copy:
+        src: brand-activity.mjs
+        dest: /home/ubuntu/Workspace/.ansible-ops/brand-activity.mjs
+        mode: '0600'
+    - name: Plan, apply, verify or roll back the exact Harness release
+      ansible.builtin.command:
+        argv: [/usr/bin/python3, /home/ubuntu/Workspace/.ansible-ops/harness-brand-release.py]
+        stdin: "{{ {'service': services.harness, 'action': brand_release_action | default('plan'), 'gatewayImage': brand_gateway_image | default(''), 'workerImage': brand_worker_image | default(''), 'confirm': brand_release_confirm | default(false) | bool, 'receiptId': brand_release_receipt | default('')} | to_json }}"
+      register: brand_release_result
+      changed_when: brand_release_action | default('plan') in ['apply', 'rollback']
+      failed_when: false
+      no_log: true
+      when: not ansible_check_mode
+    - name: Save the sanitized release receipt on the control node
+      ansible.builtin.copy:
+        content: |
+          {{ brand_release_result.stdout }}
+        dest: '{{ playbook_dir }}/../reports/harness-brand-{{ brand_release_action | default("plan") }}.json'
+        mode: '0600'
+      delegate_to: localhost
+      become: false
+      when: not ansible_check_mode
+    - name: Show only deployment identities and release status
+      ansible.builtin.debug:
+        msg: '{{ brand_release_result.stdout | from_json }}'
+      when: not ansible_check_mode
+    - name: Require the selected release stage to pass
+      ansible.builtin.assert:
+        that:
+          - brand_release_result.rc == 0
+          - (brand_release_result.stdout | from_json).verified | bool
+        fail_msg: Harness release stage failed; inspect the sanitized receipt before proceeding.
+      when: not ansible_check_mode

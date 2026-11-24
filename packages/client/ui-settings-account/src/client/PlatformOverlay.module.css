@@ -23,7 +23,7 @@
   height: 48px;
   flex: none;
   padding: 6px 16px;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l1);
+  border-bottom: 1px solid var(--dsw-alias-border-l1);
 }
 
 .controls {
@@ -92,9 +92,9 @@
   height: 32px;
   min-width: 58px;
   padding: 0 12px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
+  border: 1px solid var(--dsw-alias-border-l2);
   border-radius: var(--dsw-radius-md);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   font-weight: 400;
 }

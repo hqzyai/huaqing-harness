@@ -1,6 +1,6 @@
-DeepSeek Harness
-DeepSeek Harness
-Welcome to DeepSeek Harness
+Huaqing Harness
+Huaqing Harness
+Welcome to Huaqing Harness
 Build potential. Explore intelligence.
 Sign in
 Add API Key

@@ -1,0 +1,45 @@
+- name: Repair only the original Harness edge private address
+  hosts: workstations
+  gather_facts: false
+  tasks:
+    - name: Require an exact workstation and explicit repair stage
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - edge_repair_action | default('plan') in ['plan', 'apply', 'rollback']
+          - edge_repair_action | default('plan') == 'plan' or edge_repair_confirm | default(false) | bool
+    - name: Create the private reviewed repair helper directory
+      ansible.builtin.file:
+        path: /home/ubuntu/Workspace/.ansible-ops/harness-edge-repair
+        state: directory
+        mode: '0700'
+    - name: Install the repair helper and its reviewed validation utilities
+      ansible.builtin.copy:
+        src: '{{ item }}'
+        dest: '/home/ubuntu/Workspace/.ansible-ops/harness-edge-repair/{{ item }}'
+        mode: '0700'
+      loop: [repair-harness-edge-address.py, brand-release.py, brand-activity.mjs]
+    - name: Plan or perform only the approved edge address repair
+      ansible.builtin.command:
+        argv: [/usr/bin/python3, /home/ubuntu/Workspace/.ansible-ops/harness-edge-repair/repair-harness-edge-address.py]
+        stdin: "{{ {'service': services.harness, 'action': edge_repair_action | default('plan'), 'receiptId': edge_repair_receipt | default(''), 'confirm': edge_repair_confirm | default(false) | bool} | to_json }}"
+      register: edge_repair_result
+      changed_when: edge_repair_action | default('plan') != 'plan'
+      failed_when: false
+      no_log: true
+    - name: Save the sanitized repair receipt
+      ansible.builtin.copy:
+        content: |
+          {{ edge_repair_result.stdout }}
+        dest: '{{ playbook_dir }}/../reports/harness-edge-address-{{ edge_repair_action | default("plan") }}.json'
+        mode: '0600'
+      delegate_to: localhost
+      become: false
+    - name: Show only repair identities and approved property paths
+      ansible.builtin.debug:
+        msg: '{{ edge_repair_result.stdout | from_json }}'
+    - name: Require the selected repair stage to pass
+      ansible.builtin.assert:
+        that:
+          - edge_repair_result.rc == 0
+          - (edge_repair_result.stdout | from_json).verified | bool

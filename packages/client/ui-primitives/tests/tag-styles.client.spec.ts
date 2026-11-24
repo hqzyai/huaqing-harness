@@ -30,10 +30,10 @@ describe('Tag.module.css', () => {
     expect(declarations('warning')).toContain('12%, transparent')
   })
 
-  it('keeps the capsule geometry on the base rule, not per tone', () => {
+  it('keeps the badge geometry on the base rule, not per tone', () => {
     const base = /^\.tag \{([^}]*)\}/m.exec(css)?.[1] ?? ''
-    expect(base).toContain('border-radius: 999px')
-    expect(base).toContain('padding: 1px 8px')
+    expect(base).toContain('border-radius: 4px')
+    expect(base).toContain('padding: 2px 6px')
     for (const tone of TONES) expect(declarations(tone)).not.toContain('border-radius')
   })
 })

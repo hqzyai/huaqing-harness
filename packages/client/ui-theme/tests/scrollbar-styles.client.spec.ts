@@ -179,7 +179,8 @@ function elevatedRungs(): Set<string> {
   const rungs = new Set([resolve('--dsw-alias-bg-layer-2'), resolve('--dsw-alias-bg-layer-3')])
   const tokens = new Set<string>()
   for (const name of definitions.keys()) {
-    if (SURFACE_TOKEN_PATTERN.test(name) && rungs.has(resolve(name))) tokens.add(name)
+    if (SURFACE_TOKEN_PATTERN.test(name) && rungs.has(resolve(name))
+      && !['--dsw-alias-bg-layer-1', '--dsw-alias-bg-base', '--dsw-specific-sidebar-fill'].includes(name)) tokens.add(name)
   }
   return tokens
 }
@@ -490,7 +491,7 @@ describe('elevated surface rebinds', () => {
     expect(elevatedSurfaces).toContain('--dsw-alias-bg-layer-2')
     expect(elevatedSurfaces).toContain('--dsw-alias-bg-layer-3')
     expect(elevatedSurfaces).toContain('--dsw-specific-menu')
-    expect(elevatedSurfaces).toContain('--dsw-specific-input-major')
+    expect(elevatedSurfaces).not.toContain('--dsw-specific-input-major')
     expect(elevatedSurfaces).toContain('--dsw-specific-tip')
     // Base surfaces stay out, or every scroll container would be in scope and
     // the check would say nothing.

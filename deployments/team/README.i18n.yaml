@@ -1,0 +1,37 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write deployments/team/README.md
+/:
+  en: d840a8cc02e29892
+  zh: aaaab2fb624542d9
+/team-deployment:
+  en: 6c4ad674050616a6
+  zh: f192e8e42b2bb5ca
+/team-deployment/prepare-the-host:
+  en: 4d399caecfed8923
+  zh: fb0996a23df1b29b
+/team-deployment/initialize-the-control-plane:
+  en: dd5153cb3bbb2913
+  zh: 04c1b620072b7629
+/team-deployment/opt-in-to-private-network-http:
+  en: 414c43263940c527
+  zh: d9ad40c2212bbe80
+/team-deployment/try-locally-with-docker-desktop:
+  en: 5aaee6461a3f818b
+  zh: abf60e9ed7495251
+/team-deployment/invite-members-and-configure-models:
+  en: 6ddfb64b58a6bf66
+  zh: 7c84cc1c1d1a9c2e
+/team-deployment/invite-members-and-configure-models/connect-a-model-service:
+  en: c38a4581a787389f
+  zh: 1af88f467e2457fe
+/team-deployment/operate-and-recover:
+  en: 171cbba01df43c92
+  zh: 73c5cd500be11f0e
+/team-deployment/verify-restart-recovery:
+  en: c770230ea68afd3c
+  zh: 56bbfa278f817d8b
+/team-deployment/deployment-limits:
+  en: 7ed6103fd9c671f9
+  zh: 4089c81af304b7b4

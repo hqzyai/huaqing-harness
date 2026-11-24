@@ -1,0 +1,55 @@
+- name: Verify the Harness public entry from the actual control node
+  hosts: workstations
+  gather_facts: false
+  tasks:
+    - name: Require the original workstation entry
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - services.harness.url == 'http://192.168.2.11:28003'
+    - name: Read public health directly from this Mac
+      ansible.builtin.uri:
+        url: http://192.168.2.11:28003/team/health
+        use_proxy: false
+        status_code: 200
+        return_content: true
+      delegate_to: localhost
+      register: brand_public_health
+    - name: Read the public sign-in page directly from this Mac
+      ansible.builtin.uri:
+        url: http://192.168.2.11:28003/team/login
+        use_proxy: false
+        status_code: 200
+        return_content: true
+      delegate_to: localhost
+      register: brand_public_login
+    - name: Require an anonymous account request to remain rejected
+      ansible.builtin.uri:
+        url: http://192.168.2.11:28003/team/api/me
+        use_proxy: false
+        status_code: 401
+      delegate_to: localhost
+    - name: Require an unrelated browser origin to remain rejected
+      ansible.builtin.uri:
+        url: http://192.168.2.11:28003/team/api/login
+        method: POST
+        headers:
+          Origin: https://unrelated.invalid
+          X-HQZY-Request: '1'
+        body_format: json
+        body: {}
+        use_proxy: false
+        status_code: 403
+      delegate_to: localhost
+    - name: Require the public product identity and healthy control plane
+      ansible.builtin.assert:
+        that:
+          - brand_public_health.json.ok | bool
+          - "'<title>Huaqing Harness</title>' in brand_public_login.content"
+    - name: Save credential-free control-node acceptance metadata
+      ansible.builtin.copy:
+        content: |
+          {"directMacLAN":true,"health":200,"login":200,"loginProduct":"Huaqing Harness","anonymousAccount":401,"foreignOrigin":403}
+        dest: '{{ playbook_dir }}/../reports/harness-brand-public.json'
+        mode: '0600'
+      delegate_to: localhost

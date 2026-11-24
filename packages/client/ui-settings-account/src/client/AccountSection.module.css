@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 16px;
   padding: 8px 0;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 22px;
   color: var(--dsw-alias-label-primary);
 }
@@ -75,7 +75,7 @@
 }
 
 .divider {
-  border-top: 0.5px solid var(--dsw-alias-border-l2);
+  border-top: 1px solid var(--dsw-alias-border-l2);
 }
 
 .links,
@@ -96,7 +96,7 @@
   height: 36px;
   min-width: 58px;
   padding: 0 14px;
-  border: 0.5px solid var(--dsw-alias-border-l3);
+  border: 1px solid var(--dsw-alias-border-l3);
   border-radius: var(--dsw-radius-md);
   font-size: 14px;
   line-height: 22px;
@@ -208,7 +208,7 @@
   white-space: pre;
 }
 
-.accountInfo { display: inline-flex; align-items: center; gap: 2px; flex: none; color: var(--dsw-alias-label-primary); font-size: 13px; line-height: 22px; text-decoration: none; }
+.accountInfo { display: inline-flex; align-items: center; gap: 2px; flex: none; color: var(--dsw-alias-label-primary); font-size: 14px; line-height: 22px; text-decoration: none; }
 
 .bonusValue {
   display: flex;

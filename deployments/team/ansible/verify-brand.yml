@@ -1,0 +1,46 @@
+- name: Verify the live Harness identity with one short real model call
+  hosts: workstations
+  gather_facts: false
+  tasks:
+    - name: Require the original workstation and an exact current worker image
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname == 'workstation_001'
+          - brand_verify_confirm | default(false) | bool
+          - brand_verify_worker is match('^hqzy-[0-9a-f-]{36}$')
+          - brand_verify_image is match('^sha256:[0-9a-f]{64}$')
+          - services.harness.docker_socket == 'unix:///run/user/1001/huaqing-docker/docker.sock'
+    - name: Read only the candidate worker image identity
+      ansible.builtin.command:
+        argv: [docker, '--host', '{{ services.harness.docker_socket }}', inspect, '{{ brand_verify_worker }}', '--format', '{{ "{{.Image}}" }}']
+      register: brand_live_image
+      changed_when: false
+    - name: Reject a worker from a different release
+      ansible.builtin.assert:
+        that: brand_live_image.stdout | trim == brand_verify_image
+    - name: Ask the live application who it is and archive only the test session
+      ansible.builtin.command:
+        argv: [docker, '--host', '{{ services.harness.docker_socket }}', exec, '-i', '{{ brand_verify_worker }}', node, '--input-type=module', '-']
+        stdin: '{{ lookup("file", playbook_dir + "/../files/verify-harness-brand.mjs") }}'
+      register: brand_live_result
+      changed_when: false
+      failed_when: false
+      no_log: true
+    - name: Store the credential-free identity verification result
+      ansible.builtin.copy:
+        content: |
+          {{ brand_live_result.stdout }}
+        dest: '{{ playbook_dir }}/../reports/harness-brand-live.json'
+        mode: '0600'
+      delegate_to: localhost
+      become: false
+    - name: Show only the test response and verification metadata
+      ansible.builtin.debug:
+        msg: '{{ brand_live_result.stdout | from_json }}'
+    - name: Require the real product identity, page title and cleanup to pass
+      ansible.builtin.assert:
+        that:
+          - brand_live_result.rc == 0
+          - (brand_live_result.stdout | from_json).success | bool
+          - (brand_live_result.stdout | from_json).testSessionArchived | bool
+          - (brand_live_result.stdout | from_json).identityVerified | bool

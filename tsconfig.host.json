@@ -8,6 +8,16 @@
     "rewriteRelativeImportExtensions": false
   },
   "include": [
+    "packages/host/team-runtime/tests/runtime.spec.ts",
+    "apps/web/tests/team-deployment.e2e.ts",
+    "apps/web/tests/team-model-config.e2e.ts",
+    "packages/identity/team-auth/tests/auth.spec.ts",
+    "packages/llm/team-models/tests/models.spec.ts",
+    "packages/host/team-server/tests/proxy.spec.ts",
+    "packages/host/team-server/tests/origins.spec.ts",
+    "packages/host/team-server/tests/lifecycle.spec.ts",
+    "packages/host/team-server/tests/model-discovery.spec.ts",
+    "packages/host/team-server/tests/model-discovery-api.spec.ts",
     "apps/web/tests/collapse-timing.e2e.ts",
     "apps/web/tests/notice-wake-tail.e2e.ts",
     "apps/web/tests/fold-blank-matrix.e2e.ts",
@@ -237,6 +247,12 @@
     "scripts/client-bundle-purity.spec.ts"
   ],
   "references": [
+    { "path": "./packages/identity/team-auth" },
+    { "path": "./packages/llm/team-models" },
+    { "path": "./packages/host/team-server" },
+    { "path": "./packages/host/team-runtime" },
+    { "path": "./packages/bundle/team-app" },
+    { "path": "./packages/bundle/team-worker" },
     { "path": "./packages/experimental/client-ui-cot-translation/tsconfig.host.json" },
     { "path": "./packages/experimental/cot-translation-bundle" },
     { "path": "./packages/experimental/session-search" },

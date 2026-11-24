@@ -1,0 +1,46 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/llm/team-models/README.md
+/:
+  en: b5b27bd626fb88d8
+  zh: 915f0882876a0b69
+/deepseek-ai-dsh-team-models:
+  en: b5c1d944e745a11d
+  zh: 05566b090a5c2206
+/deepseek-ai-dsh-team-models/summary:
+  en: 07aa1db9bc83e353
+  zh: ea3a0156c186c51a
+/deepseek-ai-dsh-team-models/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 0cd57b7b8d8c9b59
+/deepseek-ai-dsh-team-models/use-this-package:
+  en: 93a31dbe88e8af17
+  zh: 245bf644ffd24f3e
+/deepseek-ai-dsh-team-models/understand-the-implementation:
+  en: 7b6684ec3d269edc
+  zh: 9604975b5f49c72a
+/deepseek-ai-dsh-team-models/further-exploration:
+  en: 6c2016a4a7a24b8d
+  zh: f4c5134ebc495a46
+/deepseek-ai-dsh-team-models/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-team-models/model-experience/model-routing:
+  en: c01096f081607c8e
+  zh: 03c44fa0c28600e1
+/deepseek-ai-dsh-team-models/model-experience/model-routing/what-the-model-sees:
+  en: ba64cadecb14ba95
+  zh: 46f9609e02628356
+/deepseek-ai-dsh-team-models/model-experience/model-routing/token-effect:
+  en: 14316d0b0845e261
+  zh: c514e00edb7a1d73
+/deepseek-ai-dsh-team-models/model-experience/model-routing/kv-cache-effect:
+  en: c6312944279dea08
+  zh: 77b0754709cb7872
+/deepseek-ai-dsh-team-models/known-limitations-and-deferred-work:
+  en: a259eb8d21d6777d
+  zh: edeb483424c53c9c
+/deepseek-ai-dsh-team-models/known-limitations-and-deferred-work/dev-note:
+  en: e67f633dc6fe7773
+  zh: e158493cbe7c759c

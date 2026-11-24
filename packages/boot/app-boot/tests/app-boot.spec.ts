@@ -559,6 +559,8 @@ describe('auditStartupEntries', () => {
     'agent-loop',
     'webserver',
     'web-runtime',
+    'team-server',
+    'team-runtime',
     'modules',
     'connection',
     'headless-runner',
@@ -846,6 +848,26 @@ describe('loadOverlayPatches', () => {
 })
 
 describe('boot', () => {
+  it.each(['team-server', 'team-runtime'])('rejects a failed %s and disposes successful siblings', async (id) => {
+    const dir = tmp()
+    const marker = join(dir, 'sibling-disposed.txt')
+    writeFileSync(join(dir, 'sibling.mjs'), `
+      import { writeFileSync } from 'node:fs'
+      export function apply(ctx) {
+        ctx.effect(() => () => { writeFileSync(${JSON.stringify(marker)}, 'disposed') })
+      }
+    `)
+    writeFileSync(join(dir, 'team.mjs'), 'export function apply() { throw new Error("team database unavailable") }\n')
+    const config = join(dir, 'cordis.yml')
+    writeFileSync(config, `- id: sibling\n  name: ./sibling.mjs\n- id: ${id}\n  name: ./team.mjs\n`)
+    const failure = await boot(NAME, config).catch((error: unknown) => error)
+    expect(failure).toBeInstanceOf(StartupError)
+    expect((failure as StartupError).message).toContain(`${id} (required)`)
+    expect((failure as StartupError).message).toContain('team database unavailable')
+    expect((failure as StartupError).entries).toEqual([expect.objectContaining({ id, required: true })])
+    expect(readFileSync(marker, 'utf8')).toBe('disposed')
+  })
+
   it('retains import errors and inactive-entry metadata after disposing the startup tree', async () => {
     const dir = tmp()
     const config = join(dir, 'cordis.yml')

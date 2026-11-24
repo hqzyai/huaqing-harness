@@ -1,6 +1,6 @@
 .surface,
 .backing {
-  border-radius: var(--dsw-radius-lg);
+  border-radius: var(--dsw-radius-md);
 }
 
 .compact {
