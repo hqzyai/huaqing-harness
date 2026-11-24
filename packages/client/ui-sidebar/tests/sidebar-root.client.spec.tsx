@@ -126,7 +126,7 @@ describe('SidebarRoot shell', () => {
   it('routes New Session (capsule + wordmark) and the column toggle', () => {
     const b = mountShell()
     expect(screen.getByTestId('custom-brand-mark')).toBeTruthy()
-    expect(screen.queryByTestId('custom-brand-name')).toBeNull()
+    expect(screen.getByTestId('custom-brand-name')).toBeTruthy()
     // Expanded, both the wordmark and the capsule start a session.
     const starters = screen.getAllByRole('button', { name: 'New session' })
     expect(starters).toHaveLength(2)
@@ -151,7 +151,7 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.queryByText('Huaqing Harness')).toBeNull()
+    expect(screen.getByText('Huaqing Harness')).toBeTruthy()
     expect(screen.getByAltText('HQZY')).toBeTruthy()
     expect(container.querySelector('svg')).not.toBeNull()
   })
@@ -172,7 +172,7 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.queryByText('Huaqing Harness')).toBeNull()
+    expect(screen.getByText('Huaqing Harness')).toBeTruthy()
     expect(screen.queryByText(expected)).toBeNull()
     expect(screen.getByAltText('HQZY')).toBeTruthy()
   })
@@ -189,7 +189,7 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.queryByText('Huaqing Harness')).toBeNull()
+    expect(screen.getByText('Huaqing Harness')).toBeTruthy()
   })
 
   it('hands the region its wide flag and clamps expandSidebar to the collapsed state', () => {

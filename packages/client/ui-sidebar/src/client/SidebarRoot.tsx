@@ -213,6 +213,9 @@ export function SidebarRoot({
               <span className={css.brandMark}>
                 {renderSlot('sidebar.brand.mark', { size: 28 }, { fallback: <BrandWordmark size={28} /> })}
               </span>
+              <span className={css.brandName}>
+                {renderSlot('sidebar.brand.name', {}, { fallback: 'Huaqing Harness' })}
+              </span>
             </span>
           )
           return darwinDesktop

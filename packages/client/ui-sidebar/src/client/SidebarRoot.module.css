@@ -66,10 +66,6 @@
   transform: translateX(1px);
 }
 
-:global([data-windows-titlebar]) .brandName {
-  font-weight: 400;
-}
-
 :global([data-windows-titlebar]) .root.collapsed {
   padding: 0;
 }
@@ -268,8 +264,8 @@
   min-height: 28px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 24px;
+  gap: 12px;
+  height: 28px;
   min-width: 0;
 }
 
@@ -281,21 +277,13 @@
 }
 
 .brandName {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   min-width: 0;
-  height: 24px;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 24px;
-  letter-spacing: 0.04em;
-}
-
-.fallbackBrandName {
-  font-size: 16px;
-  letter-spacing: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
 }
 
 .localBuildBrand {

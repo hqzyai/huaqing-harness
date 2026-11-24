@@ -11,9 +11,9 @@ export function OfficialBrandMark({ size }: SidebarBrandMarkOwnerProps) {
 }
 
 /**
- * Render the official name artwork without its independently slotted mark.
- * @returns the official name wordmark.
+ * Render the service name next to its independently slotted mark.
+ * @returns the official service name.
  */
 export function OfficialBrandName() {
-  return <BrandWordmark includeMark={false} />
+  return <>Huaqing Harness</>
 }
