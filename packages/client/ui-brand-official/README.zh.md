@@ -9,7 +9,7 @@ kind: "package-reference"
 
 ## 概述
 
-本包让以 `official` profile 构建的客户端在侧栏显示 HQZY 蓝色标志。其他构建 profile 使用外壳的 HQZY 标志，会话首屏保留动画鱼。本包不保留运行时状态，也不影响模型请求。
+本包让以 `official` profile 构建的客户端在侧栏显示 HQZY 蓝色标志。其他构建 profile 使用外壳的 HQZY 标志和服务名。新会话首屏使用相同的公司标志。本包不保留运行时状态，也不影响模型请求。
 
 ## 目录
 
@@ -29,7 +29,7 @@ kind: "package-reference"
 
 ### 选择 profile
 
-`DSH_CLIENT_BUILD_PROFILE` 控制品牌 slot 是否注册。两种 profile 均显示不带字标的 HQZY 标志，official profile 填充现有标志 slot。会话首屏无论 profile 如何都保留 `dsh-client-ui-conversation` 的动画鱼。两种情况下插件都会照常加载并通过校验；只有注册受 profile 控制。
+`DSH_CLIENT_BUILD_PROFILE` 控制品牌 slot 是否注册。两种 profile 均在 HQZY 标志旁显示 Huaqing Harness，official profile 填充标志和名称 slot。两种 profile 的新会话首屏使用相同的品牌标志和服务名。两种情况下插件都会照常加载并通过校验；只有注册受 profile 控制。
 
 ### 替换品牌
 

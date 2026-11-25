@@ -9,7 +9,7 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-This package gives an `official` client build the HQZY blue mark in the sidebar. Other build profiles use the shell's HQZY mark, while the conversation hero retains the animated fish. It has no runtime state and does not affect model requests.
+This package gives an `official` client build the HQZY blue mark in the sidebar. Other build profiles use the shell's HQZY mark and service name. The new-session hero uses the same company mark. It has no runtime state and does not affect model requests.
 
 ## Table of Contents
 
@@ -29,7 +29,7 @@ Mount this plugin in the browser roster of a deployment whose identity is DeepSe
 
 ### Choosing the profile
 
-`DSH_CLIENT_BUILD_PROFILE` controls whether the brand slots register. Both profiles show the HQZY mark without a wordmark; the official profile supplies the existing mark slot. The conversation hero retains the animated fish from `dsh-client-ui-conversation` regardless of profile. The plugin still loads and validates in both cases; only registration is profile-gated.
+`DSH_CLIENT_BUILD_PROFILE` controls whether the brand slots register. Both profiles show the HQZY mark beside Huaqing Harness. The official profile supplies the sidebar mark and name slots. The conversation hero uses the same branding in both profiles. The plugin still loads and validates in both cases; only registration is profile-gated.
 
 ### Replacing the brand
 

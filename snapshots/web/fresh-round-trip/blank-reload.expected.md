@@ -1,6 +1,7 @@
 - banner:
   - button "Open right sidebar"
-- text: Into the Unknown Preview
+- img "HQZY"
+- text: Huaqing Harness
 - button "Choose workspace": workspace
 - button "Standard mode"
 - textbox "Describe what you want to build, / commands, @ files or sessions"
