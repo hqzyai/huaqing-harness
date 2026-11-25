@@ -1,8 +1,10 @@
 /** Locale-owned authentication and administration pages served outside user runtimes. */
 import { randomBytes } from 'node:crypto'
 
+const productTitle = '华清智言 · Huaqing Harness'
+
 const zh = {
-  title: 'Huaqing Harness', login: '登录', email: '邮箱', password: '密码', newPassword: '设置密码（15–128 个字符）',
+  title: productTitle, login: '登录', email: '邮箱', password: '密码', enterEmail: '请输入账号', invalidEmail: '请输入有效的邮箱地址', enterPassword: '请输入密码', showPassword: '显示密码', hidePassword: '隐藏密码', newPassword: '设置密码（15–128 个字符）',
   accept: '设置密码并激活账号', savedPassword: '密码已设置，请登录', account: '我的账号', admin: '管理后台',
   users: '团队成员', models: '模型服务', back: '返回工作台', logout: '退出登录', invite: '邀请成员',
   member: '普通成员', administrator: '管理员', role: '账号角色', active: '已激活', pending: '待激活', disabled: '已禁用',
@@ -90,7 +92,7 @@ const zh = {
 
 }
 const en: Record<keyof typeof zh, string> = {
-  title: 'Huaqing Harness', login: 'Sign in', email: 'Email', password: 'Password', newPassword: 'Set password (15–128 characters)',
+  title: productTitle, login: 'Sign in', email: 'Email', password: 'Password', enterEmail: 'Enter your email', invalidEmail: 'Enter a valid email address', enterPassword: 'Enter your password', showPassword: 'Show password', hidePassword: 'Hide password', newPassword: 'Set password (15–128 characters)',
   accept: 'Set password and activate', savedPassword: 'Password saved. Please sign in.', account: 'My account', admin: 'Administration',
   users: 'Team members', models: 'Model services', back: 'Back to workspace', logout: 'Sign out', invite: 'Invite member',
   member: 'Member', administrator: 'Administrator', role: 'Account role', active: 'Active', pending: 'Invited', disabled: 'Disabled',
@@ -198,6 +200,120 @@ p,.hint{color:var(--muted)}[role=alert]{color:#dc2626;min-height:21px}.user{disp
 .model-rows{display:grid;gap:16px}.model-card{border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;gap:16px}.advanced{border:1px solid var(--line);border-radius:8px;padding:12px;min-width:0}.advanced summary{cursor:pointer;font-weight:500;overflow-wrap:anywhere}.advanced[open] summary{margin-bottom:16px}.advanced .hint{margin:0 0 16px}.advanced .field-hint{margin:0}.advanced .grid{margin:16px 0}.capability-confirm{margin-top:16px}.capability-confirm input{flex:none}.capacity-error{font-size:13px;margin-top:12px;overflow-wrap:anywhere}.capacity-error:empty{display:none}.visibility{display:grid;gap:6px}.visibility .hint{margin:0}.model-editor input[readonly]{background:var(--surface)}.model-editor input[aria-invalid=true]{border-color:var(--error)}.model-editor button:disabled{cursor:default}.model-editor [hidden]{display:none}
 @media(hover:hover){.catalog-option:has(input:not(:disabled)):hover{background:var(--surface)}}@media(max-width:640px){section{padding:16px}.model-editor{padding:16px}.model-editor .actions>button{width:100%}.model-editor .editor-heading{gap:12px}.model-editor .field-hint a{margin-top:4px}}
 
+.hq-auth {
+  --hq-bg: #f5f7fb;
+  --hq-surface: #fcfdff;
+  --hq-text: #152641;
+  --hq-subtle: #455772;
+  --hq-border: #8493aa;
+  --hq-accent: #1555bb;
+  --hq-accent-hover: #104698;
+  --hq-button-text: #f8fbff;
+  --hq-error: #a62524;
+  color-scheme: light;
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 48px 24px;
+  margin: 0;
+  background: var(--hq-bg);
+  color: var(--hq-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: normal;
+}
+.hq-auth *, .hq-auth *::before, .hq-auth *::after { box-sizing: border-box; }
+.hq-auth .hq-auth-layout { width: min(100%, 388px); display: grid; gap: 30px; }
+.hq-auth .hq-auth-heading {
+  display: flex; align-items: center; gap: 10px; margin: 0; color: var(--hq-text);
+  font: inherit; font-size: 15px; line-height: 23px; font-weight: 600;
+}
+.hq-auth .hq-auth-heading img { flex: none; width: 26px; height: 22px; object-fit: contain; }
+.hq-auth .hq-auth-card { width: 100%; min-width: 0; margin: 0; }
+.hq-auth h1 { margin: 0 0 32px; color: var(--hq-text); font: inherit; font-size: 42px; line-height: 1.18; font-weight: 600; letter-spacing: -.035em; }
+.hq-auth .hq-auth-description { margin: 0 0 28px; color: var(--hq-subtle); font: inherit; }
+.hq-auth form { display: grid; gap: 20px; padding: 0; margin: 0; }
+.hq-auth .hq-auth-field { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; min-width: 0; padding: 0; margin: 0; }
+.hq-auth .hq-auth-field > * { margin: 0 !important; }
+.hq-auth label { display: block; padding: 0; margin: 0; color: var(--hq-text); font: inherit; font-weight: 500; line-height: 20px; }
+.hq-auth label::before { content: none !important; }
+.hq-auth input:not([type=checkbox]) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  min-height: 48px;
+  padding: 11px 12px;
+  margin: 0;
+  border: 1px solid var(--hq-border);
+  border-radius: 8px;
+  background: var(--hq-surface);
+  color: var(--hq-text);
+  caret-color: var(--hq-text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: normal;
+  box-shadow: none !important;
+  appearance: none;
+}
+.hq-auth input::placeholder { color: var(--hq-subtle) !important; opacity: 1 !important; font: inherit; font-weight: 400; letter-spacing: normal; }
+.hq-auth input:focus { border-color: var(--hq-border); }
+.hq-auth input:focus-visible, .hq-auth button:focus-visible { outline: 2px solid var(--hq-accent); outline-offset: 2px; }
+.hq-auth input:disabled, .hq-auth button:disabled { opacity: .6; cursor: not-allowed; }
+.hq-auth .hq-auth-password { position: relative; width: 100%; }
+.hq-auth .hq-auth-password input { padding-right: 48px !important; }
+.hq-auth .hq-auth-password > button {
+  position: absolute; inset: 0 0 auto auto; width: 44px; min-width: 44px; height: 48px; min-height: 48px;
+  display: inline-flex; align-items: center; justify-content: center; padding: 0; margin: 0;
+  border: 0; border-radius: 8px; background: transparent; color: var(--hq-subtle);
+  box-shadow: none !important; transform: none; cursor: pointer; appearance: none;
+}
+.hq-auth .hq-auth-password > button svg { display: block; width: 18px; height: 18px; stroke-width: 1.75; }
+.hq-auth .hq-auth-submit {
+  display: flex; align-items: center; justify-content: center; width: 100%; height: 48px; min-height: 48px;
+  padding: 11px 12px; margin: 4px 0 0; border: 1px solid var(--hq-accent); border-radius: 8px;
+  background: var(--hq-accent); color: var(--hq-button-text); font: inherit; font-weight: 500; line-height: 20px;
+  letter-spacing: normal; box-shadow: none !important; cursor: pointer; appearance: none;
+}
+.hq-auth .hq-auth-submit:hover:not(:disabled) { background: var(--hq-accent-hover); border-color: var(--hq-accent-hover); }
+.hq-auth .hq-auth-submit:active:not(:disabled) { transform: translateY(1px); }
+.hq-auth .hq-auth-submit > span { font: inherit; }
+.hq-auth .hq-auth-error { margin: 0; color: var(--hq-error); font: inherit; overflow-wrap: anywhere; }
+
+.hq-auth .hq-auth-field-error { padding: 0; margin: 0; color: var(--hq-error); font: inherit; font-size: 14px; line-height: 20px; font-weight: 400; }
+.hq-auth input[aria-invalid="true"] { border-color: var(--hq-error); }
+
+@media (max-width: 767px) {
+  .hq-auth { padding: 56px 24px 40px; align-items: start; }
+  .hq-auth .hq-auth-layout { gap: 26px; }
+  .hq-auth h1 { font-size: 34px; margin-bottom: 24px; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .hq-auth {
+    color-scheme: dark;
+    --hq-bg: #111b2b;
+    --hq-surface: #182538;
+    --hq-text: #edf3ff;
+    --hq-subtle: #b0c1dc;
+    --hq-border: #7589a7;
+    --hq-accent: #8db9ff;
+    --hq-accent-hover: #a9cbff;
+    --hq-button-text: #11233b;
+    --hq-error: #ffaaa8;
+  }
+}
+main.hq-auth{width:100%;max-width:none}
+.hq-auth section.hq-auth-card{border:0;padding:0}
+.hq-auth [role=alert]:empty{display:none}
+.hq-auth .hq-auth-heading{flex-wrap:nowrap;justify-content:flex-start}
+
 `
 
 // This browser program uses DOM text nodes for every server-owned value.
@@ -214,7 +330,55 @@ function message(error){return t[error.code]||t.unavailable}
 async function api(path,body,signal){const response=await fetch('/team/api/'+path,{signal,method:body===undefined?'GET':'POST',headers:{'content-type':'application/json','x-hqzy-request':'1','x-hqzy-csrf':csrf},...(body===undefined?{}:{body:JSON.stringify(body)})});let result;try{result=await response.json()}catch{throw {code:'unavailable'}}if(!response.ok)throw {code:result.error||'unavailable'};return result}
 function submit(form,label,operation){const error=el('div','',{role:'alert'}), b=button(label,null,'submit');append(form,error,b);form.addEventListener('submit',async e=>{e.preventDefault();b.disabled=true;error.textContent='';try{await operation()}catch(e){error.textContent=message(e)}finally{b.disabled=false}})}
 function showLink(value){document.querySelector('.link')?.remove();const box=el('div',null,{class:'link',role:'status'}), input=el('input',null,{readonly:'', 'aria-label':t.link});input.value=value;const copy=button(t.copy,async()=>{try{await navigator.clipboard.writeText(value);copy.textContent=t.copied}catch{input.focus();input.select()}});append(box,el('span',t.link),input,copy);root.prepend(box)}
-function authPage(accept){const box=el('div',null,{class:'auth'}), form=el('form',null);append(box,el('img',null,{src:'/team/logo.svg',alt:'HQZY',width:'40',height:'32'}),el('h1',accept?t.accept:t.login),el('p',accept?t.acceptHint:t.loginHint));const email=accept?null:field(form,t.email,'email');if(email){email.required=true;email.autocomplete='username'}const password=field(form,accept?t.newPassword:t.password,'password');password.required=true;password.autocomplete=accept?'new-password':'current-password';password.maxLength=256;if(accept)password.minLength=15;submit(form,accept?t.accept:t.login,async()=>{if(accept){await api('accept',{token:linkToken,password:password.value});linkToken='';location.assign('/team/login?activated=1')}else{await api('login',{email:email.value,password:password.value});location.assign('/')}});box.append(form);root.append(box);if(new URL(location.href).searchParams.has('activated'))box.prepend(el('p',t.savedPassword))}
+function loginPage(){
+  root.className='hq-auth';
+  const layout=el('div',null,{class:'hq-auth-layout'}), card=el('section',null,{class:'hq-auth-card','aria-labelledby':'login-title'}), form=el('form',null,{novalidate:''});
+  const heading=append(el('header',null,{class:'hq-auth-heading'}),el('img',null,{src:'/team/logo.svg',alt:'',width:'26',height:'22'}),el('span',t.title));
+  const email=field(form,t.email,'email'), password=field(form,t.password,'password');
+  email.autocomplete='username';email.placeholder=t.enterEmail;email.required=true;
+  password.autocomplete='current-password';password.placeholder=t.enterPassword;password.required=true;password.maxLength=256;
+  function feedback(input,id){
+    const label=input.parentElement, slot=el('div',null,{class:'hq-auth-field'}), error=el('p','',{id,class:'hq-auth-field-error','aria-live':'polite'});
+    label.before(slot);slot.append(label,error);input.setAttribute('aria-describedby',id);
+    const indicate=text=>{error.textContent=text;error.hidden=!text;input.setAttribute('aria-invalid',String(Boolean(text)))};
+    indicate('');input.addEventListener('input',()=>indicate(''));return indicate;
+  }
+  const emailError=feedback(email,'login-email-error'), passwordError=feedback(password,'login-password-error');
+  const toggle=button('',()=>{
+    const visible=password.type==='password';password.type=visible?'text':'password';
+    toggle.setAttribute('aria-label',visible?t.hidePassword:t.showPassword);
+    toggle.setAttribute('aria-pressed',String(visible));slash.style.display=visible?'':'none';
+  });
+  toggle.setAttribute('aria-label',t.showPassword);toggle.setAttribute('aria-pressed','false');
+  const eye=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  eye.setAttribute('viewBox','0 0 24 24');eye.setAttribute('fill','none');eye.setAttribute('stroke','currentColor');eye.setAttribute('aria-hidden','true');
+  const line=(d)=>{const shape=document.createElementNS(eye.namespaceURI,'path');shape.setAttribute('d',d);eye.append(shape);return shape};
+  line('M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z');line('M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0');
+  const slash=line('M3 3l18 18');slash.style.display='none';
+  toggle.append(eye);
+  const wrap=el('div',null,{class:'hq-auth-password'});
+  const passwordLabel=password.parentElement;password.id='team-login-password';passwordLabel.htmlFor=password.id;
+  passwordLabel.after(wrap);wrap.append(password,toggle);
+  const error=el('p','',{role:'alert',class:'hq-auth-error'}), login=button(t.login,null,'submit');
+  login.className='hq-auth-submit';
+  form.append(error,login);
+  form.addEventListener('submit',async event=>{
+    event.preventDefault();error.textContent='';
+    const emailMessage=!email.value.trim()?t.enterEmail:email.validity.typeMismatch?t.invalidEmail:'';
+    const passwordMessage=!password.value?t.enterPassword:'';
+    emailError(emailMessage);passwordError(passwordMessage);
+    if(emailMessage||passwordMessage){(emailMessage?email:password).focus();return}
+    if(login.disabled)return;
+    login.disabled=true;
+    try{await api('login',{email:email.value,password:password.value});location.assign('/')}
+    catch(e){error.textContent=message(e)}
+    finally{login.disabled=false}
+  });
+  append(card,el('h1',t.login,{id:'login-title'}),form);
+  if(new URL(location.href).searchParams.has('activated'))card.append(el('p',t.savedPassword,{role:'status'}));
+  root.append(append(layout,heading,card));
+}
+function acceptPage(){const box=el('div',null,{class:'auth'}),form=el('form',null);append(box,el('img',null,{src:'/team/logo.svg',alt:'HQZY',width:'40',height:'32'}),el('h1',t.accept),el('p',t.acceptHint));const password=field(form,t.newPassword,'password');password.required=true;password.autocomplete='new-password';password.maxLength=256;password.minLength=15;submit(form,t.accept,async()=>{await api('accept',{token:linkToken,password:password.value});linkToken='';location.assign('/team/login?activated=1')});box.append(form);root.append(box)}
 function header(){const head=el('header',null), nav=el('nav',null);append(nav,el('a',t.back,{href:'/'}),el('a',t.account,{href:'/team/account'}));if(me.user.role==='admin')nav.append(el('a',t.admin,{href:'/team/admin'}));nav.append(button(t.logout,async()=>{try{await api('logout',{});location.assign('/team/login')}catch(e){note().textContent=message(e)}}));append(head,append(el('div',null,{class:'brand-head'}),el('img',null,{src:'/team/logo.svg',alt:'HQZY',width:'36',height:'28'}),el('h1',t.title)),nav);root.append(head)}
 async function usersPage(){const section=el('section',null);section.append(el('h2',t.users));const form=el('form',null,{class:'grid'}), email=field(form,t.email,'email'), role=el('select',null);email.required=true;append(role,el('option',t.member,{value:'member'}),el('option',t.administrator,{value:'admin'}));append(form,append(el('label',null),el('span',t.role),role));submit(form,t.invite,async()=>{const result=await api('invite',{email:email.value,role:role.value});email.value='';showLink(result.url);await refresh()});section.append(form);const list=el('div',null),notice=el('div','',{role:'alert'});section.append(list,notice);root.append(section);async function refresh(){const {users}=await api('users');list.replaceChildren();for(const user of users){const row=el('div',null,{class:'user'}), actions=el('div',null,{class:'actions'}), status=el('div','',{role:'alert'});const act=async(b,operation)=>{b.disabled=true;try{await operation();await refresh()}catch(e){await refresh();notice.textContent=message(e)}finally{b.disabled=false}};const reset=button(t.reset,()=>act(reset,async()=>{showLink((await api('reset',{id:user.id})).url)}));const toggle=button(user.disabled?t.enable:t.disable,()=>{if(!user.disabled&&!confirm(t.confirmDisable))return;return act(toggle,()=>api('disable',{id:user.id,disabled:!user.disabled}))});append(actions,reset,toggle);append(row,el('span',user.email+' · '+(user.role==='admin'?t.administrator:t.member)+' · '+(user.disabled?t.disabled:user.active?t.active:t.pending)),actions,status);list.append(row)}}await refresh()}
 const bases={volcengine:'https://ark.cn-beijing.volces.com/api/v3',qwen:'https://dashscope.aliyuncs.com/compatible-mode/v1',bailian:'https://dashscope.aliyuncs.com/compatible-mode/v1',deepseek:'https://api.deepseek.com/v1',zhipu:'https://open.bigmodel.cn/api/paas/v4'};
@@ -410,7 +574,7 @@ async function modelsPage(){
   }
   await refresh();
 }
-async function main(){if(location.pathname==='/team/login'){authPage(false);return}if(location.pathname==='/team/accept'){authPage(true);return}try{me=await api('me');csrf=me.csrf}catch{location.assign('/team/login');return}header();if(location.pathname==='/team/admin'&&me.user.role==='admin'){await usersPage();await modelsPage()}else{root.append(el('h2',me.user.email),el('p',t.managed))}}
+async function main(){if(location.pathname==='/team/login'){loginPage();return}if(location.pathname==='/team/accept'){acceptPage();return}try{me=await api('me');csrf=me.csrf}catch{location.assign('/team/login');return}header();if(location.pathname==='/team/admin'&&me.user.role==='admin'){await usersPage();await modelsPage()}else{root.append(el('h2',me.user.email),el('p',t.managed))}}
 main().catch(error=>{note().textContent=message(error)});
 `
 
