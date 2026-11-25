@@ -2,7 +2,7 @@
 import { randomBytes } from 'node:crypto';
 const productTitle = '华清智言 · Huaqing Harness';
 const zh = {
-    title: productTitle, login: '登录', email: '邮箱', password: '密码', enterEmail: '请输入账号', invalidEmail: '请输入有效的邮箱地址', enterPassword: '请输入密码', showPassword: '显示密码', hidePassword: '隐藏密码', newPassword: '设置密码（15–128 个字符）',
+    title: productTitle, login: '登录', loginAccount: '账号', email: '邮箱', password: '密码', enterEmail: '请输入账号', invalidEmail: '请输入有效的邮箱地址', enterPassword: '请输入密码', showPassword: '显示密码', hidePassword: '隐藏密码', newPassword: '设置密码（15–128 个字符）',
     accept: '设置密码并激活账号', savedPassword: '密码已设置，请登录', account: '我的账号', admin: '管理后台',
     users: '团队成员', models: '模型服务', back: '返回工作台', logout: '退出登录', invite: '邀请成员',
     member: '普通成员', administrator: '管理员', role: '账号角色', active: '已激活', pending: '待激活', disabled: '已禁用',
@@ -86,7 +86,7 @@ const zh = {
     'manualSelectionHint': '手动添加模型，并按平台文档填写模型 ID 和能力',
 };
 const en = {
-    title: productTitle, login: 'Sign in', email: 'Email', password: 'Password', enterEmail: 'Enter your email', invalidEmail: 'Enter a valid email address', enterPassword: 'Enter your password', showPassword: 'Show password', hidePassword: 'Hide password', newPassword: 'Set password (15–128 characters)',
+    title: productTitle, login: 'Sign in', loginAccount: 'Account', email: 'Email', password: 'Password', enterEmail: 'Enter your email', invalidEmail: 'Enter a valid email address', enterPassword: 'Enter your password', showPassword: 'Show password', hidePassword: 'Hide password', newPassword: 'Set password (15–128 characters)',
     accept: 'Set password and activate', savedPassword: 'Password saved. Please sign in.', account: 'My account', admin: 'Administration',
     users: 'Team members', models: 'Model services', back: 'Back to workspace', logout: 'Sign out', invite: 'Invite member',
     member: 'Member', administrator: 'Administrator', role: 'Account role', active: 'Active', pending: 'Invited', disabled: 'Disabled',
@@ -210,6 +210,8 @@ p,.hint{color:var(--muted)}[role=alert]{color:#dc2626;min-height:21px}.user{disp
   background: var(--hq-bg);
   color: var(--hq-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
@@ -322,16 +324,18 @@ function loginPage(){
   root.className='hq-auth';
   const layout=el('div',null,{class:'hq-auth-layout'}), card=el('section',null,{class:'hq-auth-card','aria-labelledby':'login-title'}), form=el('form',null,{novalidate:''});
   const heading=append(el('header',null,{class:'hq-auth-heading'}),el('img',null,{src:'/team/logo.svg',alt:'',width:'26',height:'22'}),el('span',t.title));
-  const email=field(form,t.email,'email'), password=field(form,t.password,'password');
-  email.autocomplete='username';email.placeholder=t.enterEmail;email.required=true;
-  password.autocomplete='current-password';password.placeholder=t.enterPassword;password.required=true;password.maxLength=256;
-  function feedback(input,id){
-    const label=input.parentElement, slot=el('div',null,{class:'hq-auth-field'}), error=el('p','',{id,class:'hq-auth-field-error','aria-live':'polite'});
-    label.before(slot);slot.append(label,error);input.setAttribute('aria-describedby',id);
+  function loginField(id,label,type,placeholder,autocomplete){
+    const errorId=id+'-error';
+    const input=el('input',null,{id,type,placeholder,autocomplete,required:'','aria-describedby':errorId});
+    const error=el('p','',{id:errorId,class:'hq-auth-field-error','aria-live':'polite'});
+    form.append(append(el('div',null,{class:'hq-auth-field'}),el('label',label,{for:id}),input,error));
     const indicate=text=>{error.textContent=text;error.hidden=!text;input.setAttribute('aria-invalid',String(Boolean(text)))};
-    indicate('');input.addEventListener('input',()=>indicate(''));return indicate;
+    indicate('');input.addEventListener('input',()=>indicate(''));
+    return {input,indicate};
   }
-  const emailError=feedback(email,'login-email-error'), passwordError=feedback(password,'login-password-error');
+  const {input:email,indicate:emailError}=loginField('team-login-email',t.loginAccount,'email',t.enterEmail,'username');
+  const {input:password,indicate:passwordError}=loginField('team-login-password',t.password,'password',t.enterPassword,'current-password');
+  password.maxLength=256;
   const toggle=button('',()=>{
     const visible=password.type==='password';password.type=visible?'text':'password';
     toggle.setAttribute('aria-label',visible?t.hidePassword:t.showPassword);
@@ -345,8 +349,7 @@ function loginPage(){
   const slash=line('M3 3l18 18');slash.style.display='none';
   toggle.append(eye);
   const wrap=el('div',null,{class:'hq-auth-password'});
-  const passwordLabel=password.parentElement;password.id='team-login-password';passwordLabel.htmlFor=password.id;
-  passwordLabel.after(wrap);wrap.append(password,toggle);
+  password.replaceWith(wrap);wrap.append(password,toggle);
   const error=el('p','',{role:'alert',class:'hq-auth-error'}), login=button(t.login,null,'submit');
   login.className='hq-auth-submit';
   form.append(error,login);
